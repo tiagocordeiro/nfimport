@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class TimeStampedModel(models.Model):
@@ -22,3 +23,11 @@ class Active(models.Model):
 
     class Meta:
         abstract = True
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='profiles/')
+
+    class Meta:
+        verbose_name_plural = "Profiles"
