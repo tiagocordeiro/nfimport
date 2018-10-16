@@ -126,38 +126,29 @@
             </li>
 
             <li>
-                <a href="#">Máquinas</a>
+                <a href="#">Importação</a>
 
                 <ul>
                     <li>
                         <a href="#">
-                            <i class="far fa-newspaper"></i>
-                            <span>Adicionar</span>
+                            <i class="fa fa-th"></i>
+                            <span>Máquinas</span>
                         </a>
+
+                        <ul>
+                            <li><a href="#">Adicionar</a></li>
+                            <li><a href="{% url 'products_list' %}">Consulta</a></li>
+                        </ul>
                     </li>
                     <li>
                         <a href="{% url 'products_list' %}">
-                            <i class="far fa-newspaper"></i>
-                            <span>Consultar</span>
+                            <i class="fa fa-th-list"></i>
+                            <span>Notas</span>
                         </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#">Notas</a>
-
-                <ul>
-                    <li>
-                        <a href="#">
-                            <i class="far fa-newspaper"></i>
-                            <span>Adicionar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="far fa-newspaper"></i>
-                            <span>Consultar</span>
-                        </a>
+                        <ul>
+                            <li><a href="#">Adicionar</a></li>
+                            <li><a href="#">Consulta</a></li>
+                        </ul>
                     </li>
                 </ul>
             </li>
