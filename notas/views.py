@@ -25,12 +25,12 @@ def product_create(request):
         usuario = None
 
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.added_by = request.user
             product.save()
-            return redirect(produc_list)
+            return redirect(product_list)
 
     else:
         form = ProductForm()

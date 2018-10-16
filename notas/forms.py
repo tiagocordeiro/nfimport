@@ -65,5 +65,4 @@ class ProductForm(ModelForm):
             'nome_classificacao': Textarea(attrs={'class': 'form-control', 'placeholder': 'Classificação'}),
             'caixa_lateral_base': TextInput(attrs={'class': 'form-control', 'placeholder': 'Caixa Lateral Base'}),
             'opcionais': Textarea(attrs={'class': 'form-control', 'placeholder': 'Opcionais'}),
-            'imagem': ImageField(),
         }

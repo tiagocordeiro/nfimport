@@ -24,14 +24,15 @@
     </div>
 
     <div class="panel">
-
         <!-- Edit Product Start -->
         <div class="records--body">
             <div class="title">
-                <h6 class="h6">Product Details</h6>
+                <h6 class="h6">Detalhes</h6>
 
-                <a href="#" class="btn btn-rounded btn-danger">Delete Product</a>
+                <a href="#" class="btn btn-rounded btn-danger">Cancelar</a>
             </div>
+            <form action="{% url 'product_create' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
             <!-- Tabs Nav Start -->
             <ul class="nav nav-tabs">
@@ -57,137 +58,263 @@
             <div class="tab-content">
                 <!-- Tab Pane Start -->
                 <div class="tab-pane fade show active" id="tab01">
-                    <form action="#">
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Product Name: *</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Máquina:</span>
 
-                            <div class="col-md-9">
-                                {{ form.maquina_pt }}
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.maquina_pt }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Long Description:</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Tipo:</span>
 
-                            <div class="col-md-9">
-                                <textarea name="textarea" class="form-control"></textarea>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.tipo_pt }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Short Description: *</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Modelo:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control" required>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.modelo_pt }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Category:</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Área de trabalho:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control">
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.area_trabalho_pt }}
                         </div>
+                    </div>
 
-                        <div class="row mt-3">
-                            <div class="col-md-9 offset-md-3">
-                                <input type="submit" value="Update Product" class="btn btn-rounded btn-success">
-                            </div>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Eixo Z:</span>
+
+                        <div class="col-md-9">
+                            {{ form.eixo_z_pt }}
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Cor:</span>
+
+                        <div class="col-md-9">
+                            {{ form.cor_pt }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">O que ela faz:</span>
+
+                        <div class="col-md-9">
+                            {{ form.faz_pt }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Voltagem:</span>
+
+                        <div class="col-md-9">
+                            {{ form.voltagem_pt }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">NCM:</span>
+
+                        <div class="col-md-9">
+                            {{ form.ncm }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Caixa Lateral Base:</span>
+
+                        <div class="col-md-9">
+                            {{ form.caixa_lateral_base }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Opcionais:</span>
+
+                        <div class="col-md-9">
+                            {{ form.opcionais }}
+                        </div>
+                    </div>
                 </div>
                 <!-- Tab Pane End -->
 
                 <!-- Tab Pane Start -->
                 <div class="tab-pane fade" id="tab02">
-                    <form action="#">
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Product Name: *</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Máquina:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control" required>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.maquina_ch }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Long Description:</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Tipo:</span>
 
-                            <div class="col-md-9">
-                                <textarea name="textarea" class="form-control"></textarea>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.tipo_ch }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Short Description: *</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Modelo:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control" required>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.modelo_ch }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Category:</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Área de trabalho:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control">
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.area_trabalho_ch }}
                         </div>
+                    </div>
 
-                        <div class="row mt-3">
-                            <div class="col-md-9 offset-md-3">
-                                <input type="submit" value="Update Product" class="btn btn-rounded btn-success">
-                            </div>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Eixo Z:</span>
+
+                        <div class="col-md-9">
+                            {{ form.eixo_z_ch }}
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Cor:</span>
+
+                        <div class="col-md-9">
+                            {{ form.cor_ch }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">O que ela faz:</span>
+
+                        <div class="col-md-9">
+                            {{ form.faz_ch }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Voltagem:</span>
+
+                        <div class="col-md-9">
+                            {{ form.voltagem_ch }}
+                        </div>
+                    </div>
                 </div>
                 <!-- Tab Pane End -->
 
                 <!-- Tab Pane Start -->
                 <div class="tab-pane fade" id="tab03">
-                    <form action="#">
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Product Name: *</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Máquina:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control" required>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.maquina_en }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Long Description:</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Tipo:</span>
 
-                            <div class="col-md-9">
-                                <textarea name="textarea" class="form-control"></textarea>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.tipo_en }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Short Description: *</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Modelo:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control" required>
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.modelo_en }}
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <span class="label-text col-md-3 col-form-label">Category:</span>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Área de trabalho:</span>
 
-                            <div class="col-md-9">
-                                <input type="text" name="text" class="form-control">
-                            </div>
+                        <div class="col-md-9">
+                            {{ form.area_trabalho_en }}
                         </div>
+                    </div>
 
-                        <div class="row mt-3">
-                            <div class="col-md-9 offset-md-3">
-                                <input type="submit" value="Update Product" class="btn btn-rounded btn-success">
-                            </div>
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Eixo Z:</span>
+
+                        <div class="col-md-9">
+                            {{ form.eixo_z_en }}
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Cor:</span>
+
+                        <div class="col-md-9">
+                            {{ form.cor_en }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">O que ela faz:</span>
+
+                        <div class="col-md-9">
+                            {{ form.faz_en }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Voltagem:</span>
+
+                        <div class="col-md-9">
+                            {{ form.voltagem_en }}
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab Pane End -->
+
+                <!-- Tab Pane Start -->
+                <div class="tab-pane fade" id="tab04">
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Classificação:</span>
+
+                        <div class="col-md-9">
+                            {{ form.nome_classificacao }}
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab Pane End -->
+
+                <!-- Tab Pane Start -->
+                <div class="tab-pane fade" id="tab05">
+                    <div class="form-group row">
+                        <span class="label-text col-md-3 col-form-label">Imagem:</span>
+
+                        <div class="col-md-9">
+                            {{ form.imagem }}
+                        </div>
+                    </div>
                 </div>
                 <!-- Tab Pane End -->
             </div>
             <!-- Tab Content End -->
+            <div class="row mt-3">
+                <div class="col-md-9 offset-md-3">
+                    <input type="submit" value="Adicionar" class="btn btn-rounded btn-success">
+                </div>
+            </div>
+            </form>
         </div>
         <!-- Edit Product End -->
     </div>
