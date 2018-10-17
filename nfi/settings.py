@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import django_heroku
 
 from decouple import config, Csv
 from dj_database_url import parse as dburl
@@ -131,7 +132,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 # Configure Django App for Heroku.
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
 
 # Force ssl if run in Heroku
 if 'DYNO' in os.environ:
