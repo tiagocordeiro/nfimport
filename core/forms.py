@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm, CharField, EmailField
+from django.forms import ModelForm, CharField, EmailField, TextInput
 
 from .models import UserProfile
 
@@ -16,6 +16,12 @@ class ProfileForm(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+        widgets = {
+            'first_name': TextInput(attrs={'class': 'form-control'}),
+            'last_name': TextInput(attrs={'class': 'form-control'}),
+            'email': TextInput(attrs={'class': 'form-control', 'type': 'email'}),
+        }
 
 
 class SignUpForm(UserCreationForm):
