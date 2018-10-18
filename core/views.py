@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render, redirect
 
-from .forms import UserProfileForm, ProfileForm, SignUpForm
+from .forms import ProfileForm, SignUpForm
 from .models import UserProfile
 
 
@@ -58,28 +58,6 @@ def profile_update(request):
     return render(request, 'profile_update.html', {'form': form,
                                                    'formset': formset,
                                                    'usuario': usuario, })
-
-
-@login_required
-def avatar_update(request):
-    try:
-        usuario = get_object_or_404(UserProfile)
-    except UserProfile.DoesNotExist:
-        usuario = None
-
-    perfil = get_object_or_404(UserProfile, user=request.user)
-
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=perfil)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-
-    else:
-        form = UserProfileForm(instance=perfil)
-
-    return render(request, 'avatar_update.html', {'form': form,
-                                                  'usuario': usuario, })
 
 
 def signup(request):

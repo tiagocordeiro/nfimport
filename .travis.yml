@@ -1,0 +1,27 @@
+language: python
+python:
+  - "3.6.6"
+services:
+  postgresql
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="nfi.settings"
+addons:
+  postgresql: '9.5'
+# command to install dependencies
+install:
+  - cp contrib/env-sample .env
+  - pip install -r requirements-dev.txt
+before_script:
+  - psql -c "CREATE DATABASE travis_ci_db;" -U postgres
+  - python manage.py migrate --noinput
+# command to run tests
+script:
+  - pycodestyle nfi/ core/ notas/
+  - pyflakes nfi/ core/ notas/
+  - python manage.py test -v 2
+#  - flake8 casaconceito/ parceiros/ pages/
+#  - py.test --cov=pytocli tests/
+#  - python -m doctest README.md
+# after_success:
+#  - coveralls
