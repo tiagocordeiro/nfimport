@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 
 from core.models import UserProfile
 from .forms import ProductForm
-from .models import Product
+from .models import Product, Nota
 
 
 @login_required
@@ -37,3 +37,14 @@ def product_create(request):
 
     return render(request, 'products/create.html', {'usuario': usuario,
                                                     'form': form, })
+
+
+@login_required
+def nota_list(request):
+    try:
+        usuario = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        usuario = None
+    notas = Nota.objects.all()
+    return render(request, 'notas/list.html', {'notas': notas,
+                                               'usuario': usuario, })
