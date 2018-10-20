@@ -72,3 +72,7 @@ class NotaItens(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = 'Item'
+        verbose_name_plural = 'Itens'

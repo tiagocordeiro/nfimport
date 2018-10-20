@@ -1,6 +1,7 @@
-from django.forms import ModelForm, TextInput, Textarea
+from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput
+from django.forms import formset_factory
 
-from .models import Product
+from .models import Product, Nota, NotaItens
 
 
 class ProductForm(ModelForm):
@@ -66,3 +67,30 @@ class ProductForm(ModelForm):
             'caixa_lateral_base': TextInput(attrs={'class': 'form-control', 'placeholder': 'Caixa Lateral Base'}),
             'opcionais': Textarea(attrs={'class': 'form-control', 'placeholder': 'Opcionais'}),
         }
+
+
+class NotaForm(ModelForm):
+    class Meta:
+        model = Nota
+        fields = ['description', 'date', 'dolar_dia']
+
+        widgets = {
+            'description': TextInput(attrs={'class': 'form-control', 'placeholder': 'Descrição'}),
+            'date': TextInput(attrs={'class': 'form-control'}),
+            'dolar_dia': TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class NotaItensForm(ModelForm):
+    class Meta:
+        model = NotaItens
+        fields = ['item', 'quantidade', 'valor_usd']
+
+        widgets = {
+            'item': Select(attrs={'class': 'form-control'}),
+            'quantidade': NumberInput(attrs={'class': 'form-control'}),
+            'valor_usd': NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+NotaItensFormSet = formset_factory(NotaItensForm, extra=1)
