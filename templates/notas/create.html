@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block title %}Dashboard - S.I.E.{% endblock %}
-{% block page-title %}Máquinas{% endblock %}
+{% block page-title %}Notas{% endblock %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Máquinas</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'nota_list' %}">Notas</a></li>
     <li class="breadcrumb-item active"><span>Cadastro</span></li>
 {% endblock %}
 
@@ -17,7 +17,7 @@
         <!-- Records Header Start -->
         <div class="records--header">
             <div class="title fa-shopping-bag">
-                <h3 class="h3">Máquinas <a href="{% url 'nota_list' %}" class="btn btn-sm btn-outline-info">Ver tudo</a></h3>
+                <h3 class="h3">Notas <a href="{% url 'nota_list' %}" class="btn btn-sm btn-outline-info">Ver tudo</a></h3>
             </div>
         </div>
         <!-- Records Header End -->
@@ -28,8 +28,6 @@
         <div class="records--body">
             <div class="title">
                 <h6 class="h6">Detalhes</h6>
-
-                <a href="#" class="btn btn-rounded btn-danger">Cancelar</a>
             </div>
             <form action="{% url 'nota_create' %}" method="post">
             {% csrf_token %}
@@ -78,18 +76,37 @@
                 <!-- Tab Pane Start -->
                 <div class="tab-pane fade" id="tab02">
                     <!-- Form Group Start -->
+                    <div class="row form-row spacer">
+                        <div class="input-group">
+                            <div class="col-lg-7 col-md-12 col-sm-12">
+                                Máquina
+                            </div>
+                            <div class="col-lg-2 col-md-5 col-sm-5">
+                                Quantidade
+                            </div>
+                            <div class="col-lg-2 col-md-5 col-sm-5">
+                                Valor
+                            </div>
+                            <div class="col-lg-1 col-md-2 col-sm-2">
+
+                            </div>
+                        </div>
+                    </div>
                     {{ formset.management_form }}
                     {% for form in formset %}
                     <div class="row form-row spacer">
                         <div class="input-group">
-                            <div class="col-6">
+                            <div class="col-lg-7 col-md-12 col-sm-12">
                                 {{form.item}}
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-2 col-md-5 col-sm-5">
                                 {{form.quantidade}}
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-2 col-md-5 col-sm-5">
                                 {{form.valor_usd}}
+                            </div>
+                            <div class="col-lg-1 col-md-2 col-sm-2">
+                                <a href="#" class="btn btn-rounded btn-outline-secondary mb-3"><i class="fa fa-plus-circle"></i></a>
                             </div>
                         </div>
                     </div>
@@ -100,7 +117,8 @@
             </div>
             <!-- Tab Content End -->
             <div class="row mt-3">
-                <div class="col-md-9 offset-md-3">
+                <div class="col-12">
+                    <a href="{% url 'nota_list' %}" class="btn btn-rounded btn-danger">Cancelar</a>
                     <input type="submit" value="Adicionar" class="btn btn-rounded btn-success">
                 </div>
             </div>
