@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 from core.models import UserProfile
 from .forms import ProductForm, NotaForm, NotaItensFormSet
 from .models import Product, Nota
-from django.forms import formset_factory
 
 
 @login_required

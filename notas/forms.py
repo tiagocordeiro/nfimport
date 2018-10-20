@@ -94,4 +94,3 @@ class NotaItensForm(ModelForm):
 
 
 NotaItensFormSet = formset_factory(NotaItensForm, extra=1)
-
