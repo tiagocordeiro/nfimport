@@ -90,7 +90,7 @@ class NotaItensForm(ModelForm):
         widgets = {
             'item': Select(attrs={'class': 'form-control'}),
             'quantidade': NumberInput(attrs={'class': 'form-control'}),
-            'valor_usd': NumberInput(attrs={'class': 'form-control'}),
+            'valor_usd': NumberInput(attrs={'class': 'form-control teste_class'}),
         }
 
 
