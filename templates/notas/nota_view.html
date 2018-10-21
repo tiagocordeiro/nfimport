@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Dashboard - S.I.E.{% endblock %}
+{% block page-title %}Notas{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'nota_list' %}">Notas</a></li>
+    <li class="breadcrumb-item active"><span>Cadastro</span></li>
+{% endblock %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script><script>
+    $(document).ready(function(){
+        $("#add-item").click(function(ev) {
+            ev.preventDefault();
+            var count = $('#nota').children().length;
+            var tmplMarkup = $("#item-nota").html();
+            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+            $("div#nota").append(compiledTmpl);
+
+            // update form count
+            $('#id_notaitens_set-TOTAL_FORMS').attr('value', count + 1);
+
+            // some animate to scroll to view our new form
+            $('html, body').animate({
+                scrollTop: $("#add-item").position().top-200
+            }, 800);
+        });
+    });
+</script>
+<section class="main--content">
+    <div class="panel">
+        <div class="records--header">
+            <div class="title fa-shopping-bag">
+                <h3 class="h3">Cadastrar Nota <a href="{% url 'nota_list' %}" class="btn btn-sm btn-outline-info">Ver tudo</a></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <!-- Edit Product Start -->
+        <div class="records--body">
+            <div class="title">
+                <h6 class="h6">Detalhes</h6>
+            </div>
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ forms|crispy }}
+                {{ formset.management_form }}
+
+                <legend class="lead">PRODUTOS</legend>
+
+                <div id="nota" class="form-inline form-group">
+                    {% for item_nota_form in formset %}
+                        <div id="item-{{ forloop.counter0 }}" class="form-group" style="margin-top: 10px">
+                            {{ item_nota_form|crispy }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <a class="btn btn-info" id="add-item"><i class="fa fa-plus"></i> Add Item</a>
+
+                        <a href="{% url 'nota_list' %}" class="btn btn-warning pull-right"><i class="fa fa-times"></i> Cancelar</a>
+                        <button class="btn btn-rounded btn-success" value="Save"><i class="fa fa-floppy-o"></i> Salvar</button>
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <script type="text/html" id="item-nota">
+        <div id="item-__prefix__" style="margin-top: 10px" class="form-group">
+                {{ formset.empty_form|crispy }}
+        </div>
+    </script>
+
+</section>
+<!-- Main Content End -->
+{% endblock %}

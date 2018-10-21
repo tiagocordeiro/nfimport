@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.generic import CreateView
 
 from core.models import UserProfile
 from .forms import ProductForm, NotaForm, NotaItensFormSet
@@ -77,3 +78,34 @@ def nota_create(request):
     return render(request, 'notas/create.html', {'usuario': usuario,
                                                  'notaform': notaform,
                                                  'formset': formset, })
+
+
+class NotaView(CreateView):
+    template_name = 'notas/nota_view.html'
+    form_class = NotaForm
+
+    def get_context_data(self, **kwargs):
+        context = super(NotaView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['forms'] = NotaForm(self.request.POST)
+            context['formset'] = NotaItensFormSet(self.request.POST)
+            context['usuario'] = UserProfile.objects.get(user=self.request.user)
+        else:
+            context['forms'] = NotaForm()
+            context['formset'] = NotaItensFormSet()
+            context['usuario'] = UserProfile.objects.get(user=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        forms = context['forms']
+        formset = context['formset']
+        if forms.is_valid() and formset.is_valid():
+            self.object = form.save()
+            forms.instance = self.object
+            formset.instance = self.object
+            forms.save()
+            formset.save()
+            return redirect('nota_list')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))

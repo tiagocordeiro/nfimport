@@ -1,5 +1,6 @@
 from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput
-from django.forms import formset_factory
+# from django.forms import formset_factory
+from django.forms.models import inlineformset_factory
 
 from .models import Product, Nota, NotaItens
 
@@ -93,4 +94,5 @@ class NotaItensForm(ModelForm):
         }
 
 
-NotaItensFormSet = formset_factory(NotaItensForm, extra=1)
+# NotaItensFormSet = formset_factory(NotaItensForm, extra=1)
+NotaItensFormSet = inlineformset_factory(Nota, NotaItens, form=NotaItensForm)
