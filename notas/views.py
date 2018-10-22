@@ -81,6 +81,7 @@ def nota_create(request):
     context = {
         'forms': forms,
         'formset': formset,
+        'usuario': usuario,
     }
 
     return render(request, 'notas/add.html', context)
