@@ -90,9 +90,9 @@ class NotaItensForm(ModelForm):
         widgets = {
             'item': Select(attrs={'class': 'form-control'}),
             'quantidade': NumberInput(attrs={'class': 'form-control'}),
-            'valor_usd': NumberInput(attrs={'class': 'form-control teste_class'}),
+            'valor_usd': NumberInput(attrs={'class': 'form-control'}),
         }
 
 
 # NotaItensFormSet = formset_factory(NotaItensForm, extra=1)
-NotaItensFormSet = inlineformset_factory(Nota, NotaItens, form=NotaItensForm)
+NotaItensFormSet = inlineformset_factory(Nota, NotaItens, form=NotaItensForm, extra=1)
