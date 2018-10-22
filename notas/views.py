@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
-
+from django.forms.models import inlineformset_factory
 from core.models import UserProfile
-from .forms import ProductForm, NotaForm, NotaItensFormSet
-from .models import Product, Nota
+from .forms import ProductForm, NotaForm, NotaItensFormSet, NotaItensForm
+from .models import Product, Nota, NotaItens
 
 
 @login_required
@@ -53,31 +53,37 @@ def nota_list(request):
 
 @login_required
 def nota_create(request):
+    nota_forms = Nota()
+    item_nota_formset = inlineformset_factory(
+        Nota, NotaItens, form=NotaItensForm, extra=0, can_delete=False,
+        min_num=1, validate_min=True,
+    )
     try:
         usuario = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
         usuario = None
 
     if request.method == 'POST':
-        notaform = NotaForm(request.POST)
-        formset = NotaItensFormSet(request.POST)
-        if notaform.is_valid() and formset.is_valid():
-            nota = notaform.save(commit=False)
-            nota.added_by = request.user
-            nota.save()
-            for form in formset:
-                item = form.save(commit=False)
-                item.nota = nota
-                item.save()
-        return redirect(nota_list)
+        forms = NotaForm(request.POST, instance=nota_forms, prefix='main')
+        formset = item_nota_formset(request.POST, instance=nota_forms, prefix='product')
+
+        if forms.is_valid() and formset.is_valid():
+            forms = forms.save(commit=False)
+            forms.added_by = request.user
+            forms.save()
+            formset.save()
+            return redirect(nota_list)
 
     else:
-        notaform = NotaForm()
-        formset = NotaItensFormSet()
+        forms = NotaForm(instance=nota_forms, prefix='main')
+        formset = item_nota_formset(instance=nota_forms, prefix='product')
 
-    return render(request, 'notas/create.html', {'usuario': usuario,
-                                                 'notaform': notaform,
-                                                 'formset': formset, })
+    context = {
+        'forms': forms,
+        'formset': formset,
+    }
+
+    return render(request, 'notas/add.html', context)
 
 
 class NotaView(CreateView):
@@ -89,11 +95,17 @@ class NotaView(CreateView):
         if self.request.POST:
             context['forms'] = NotaForm(self.request.POST)
             context['formset'] = NotaItensFormSet(self.request.POST)
-            context['usuario'] = UserProfile.objects.get(user=self.request.user)
+            try:
+                context['usuario'] = UserProfile.objects.get(user=self.request.user)
+            except UserProfile.DoesNotExist:
+                context['usuario'] = None
         else:
             context['forms'] = NotaForm()
             context['formset'] = NotaItensFormSet()
-            context['usuario'] = UserProfile.objects.get(user=self.request.user)
+            try:
+                context['usuario'] = UserProfile.objects.get(user=self.request.user)
+            except UserProfile.DoesNotExist:
+                context['usuario'] = None
         return context
 
     def form_valid(self, form):
