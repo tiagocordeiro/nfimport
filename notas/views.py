@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
-from django.forms.models import inlineformset_factory
+
 from core.models import UserProfile
 from .forms import ProductForm, NotaForm, NotaItensFormSet, NotaItensForm
 from .models import Product, Nota, NotaItens

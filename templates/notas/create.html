@@ -11,6 +11,26 @@
 {% endblock %}
 
 {% block content %}
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function(){
+    $("#add-item").click(function(ev) {
+        ev.preventDefault();
+        var count = $('#nota').children().length;
+        var tmplMarkup = $("#item-nota").html();
+        var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+        $("div#nota").append(compiledTmpl);
+
+        // update form count
+        $('#id_notaitens_set-TOTAL_FORMS').attr('value', count + 1);
+
+        // some animate to scroll to view our new form
+        $('html, body').animate({
+            scrollTop: $("#add-item").position().top-200
+        }, 800);
+    });
+});
+</script>
 <!-- Main Content Start -->
 <section class="main--content">
     <div class="panel">
@@ -92,25 +112,25 @@
                             </div>
                         </div>
                     </div>
+                <div id="nota">
                     {{ formset.management_form }}
                     {% for form in formset %}
-                    <div class="row form-row spacer">
+                    <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
                         <div class="input-group">
-                            <div class="col-lg-7 col-md-12 col-sm-12">
+                            <div class="col-lg-8 col-md-12 col-sm-12">
                                 {{form.item}}
                             </div>
-                            <div class="col-lg-2 col-md-5 col-sm-5">
+                            <div class="col-lg-2 col-md-6 col-sm-6">
                                 {{form.quantidade}}
                             </div>
-                            <div class="col-lg-2 col-md-5 col-sm-5">
+                            <div class="col-lg-2 col-md-6 col-sm-6">
                                 {{form.valor_usd}}
-                            </div>
-                            <div class="col-lg-1 col-md-2 col-sm-2">
-                                <a href="#" class="btn btn-rounded btn-outline-secondary mb-3"><i class="fa fa-plus-circle"></i></a>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
+                </div>
+                <a class="btn btn-info" id="add-item"><i class="fa fa-plus"></i> Add Item</a>
                     <!-- Form Group End -->
                 </div>
                 <!-- Tab Pane End -->
@@ -127,5 +147,25 @@
         <!-- Edit Product End -->
     </div>
 </section>
+<script type="text/html" id="item-nota">
+    <div id="item-__prefix__" style="margin-top: 10px" class="form-group">
+        {% for form in formset %}
+        <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
+            <div class="input-group">
+                <div class="col-lg-8 col-md-12 col-sm-12">
+                    {{form.item}}
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    {{form.quantidade}}
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    {{form.valor_usd}}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</script>
 <!-- Main Content End -->
 {% endblock %}
