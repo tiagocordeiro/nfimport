@@ -14,7 +14,7 @@
 * Rode as migrações.
 
 ```
-git clone https://github.com/rg3915/nfimport.git
+git clone https://github.com/tiagocordeiro/nfimport.git
 cd nfimport
 python3 -m venv .venv
 source .venv/bin/activate
