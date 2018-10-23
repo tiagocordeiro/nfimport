@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class NotaItensInline(admin.StackedInline):
     model = NotaItens
-    extra = 1
+    extra = 0
 
 
 class NotaAdmin(admin.ModelAdmin):

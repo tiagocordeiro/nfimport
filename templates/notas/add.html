@@ -85,23 +85,10 @@
 
     <script type="text/html" id="item-nota">
         <div id="item-__prefix__" style="margin-top: 10px" class="form-group">
-            {% for item_nota_form in formset %}
-                <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
-                    <div class="input-group">
-                        <div class="col-lg-8 col-md-12 col-sm-12">
-                            {{ item_nota_form.item|as_crispy_field }}
-                        </div>
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                            {{ item_nota_form.quantidade|as_crispy_field }}
-                        </div>
-                        <div class="col-lg-2 col-md-6 col-sm-6">
-                            {{ item_nota_form.valor_usd|as_crispy_field }}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+          {{ formset.empty_form }}
         </div>
     </script>
+
 
 </section>
 <!-- Main Content End -->
