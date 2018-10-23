@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput, DateField, SelectDateWidget
+from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput, SelectDateWidget
 # from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
 
@@ -78,7 +78,7 @@ class NotaForm(ModelForm):
         widgets = {
             'description': TextInput(attrs={'class': 'form-control', 'placeholder': 'Descrição'}),
             'date': SelectDateWidget(attrs={'class': 'form-control'}),
-            'dolar_dia': TextInput(attrs={'class': 'form-control'}),
+            'dolar_dia': NumberInput(attrs={'class': 'form-control'}),
         }
 
 
