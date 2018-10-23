@@ -24,6 +24,11 @@
 
             // update form count
             $('#id_product-TOTAL_FORMS').attr('value', count + 1);
+
+            // update css
+            $('.input-group')[count].childNodes[1].className = 'col-lg-8 col-md-12 col-sm-12'
+            $('.input-group')[count].childNodes[3].className = 'col-lg-2 col-md-6 col-sm-6'
+            $('.input-group')[count].childNodes[5].className = 'col-lg-2 col-md-6 col-sm-6'
         });
     });
 </script>
@@ -84,8 +89,10 @@
     </div>
 
     <script type="text/html" id="item-nota">
-        <div id="item-__prefix__" style="margin-top: 10px" class="form-group">
-          {{ formset.empty_form|crispy }}
+        <div id="item-__prefix__" style="margin-top: 10px" class="row form-row spacer">
+            <div class="input-group">
+              {{ formset.empty_form|crispy }}
+            </div>
         </div>
     </script>
 
