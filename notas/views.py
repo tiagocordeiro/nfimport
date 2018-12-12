@@ -88,7 +88,7 @@ def nota_list(request):
 def nota_create(request):
     nota_forms = Nota()
     item_nota_formset = inlineformset_factory(
-        Nota, NotaItens, form=NotaItensForm, extra=0, can_delete=False,
+        Nota, NotaItens, form=NotaItensForm, extra=0, can_delete=True,
         min_num=1, validate_min=True,
     )
     try:
