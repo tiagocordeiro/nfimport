@@ -4,7 +4,7 @@ from .models import Product, Nota, NotaItens
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('maquina_pt',)
+    list_display = ('maquina_pt', 'tipo_pt', 'modelo_pt')
 
 
 class NotaItensInline(admin.StackedInline):
