@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.views.generic import CreateView
 from django.forms.models import inlineformset_factory
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import CreateView
 
 from core.models import UserProfile
 from .forms import ProductForm, NotaForm, NotaItensFormSet, NotaItensForm
@@ -39,6 +40,37 @@ def product_create(request):
 
     return render(request, 'products/create.html', {'usuario': usuario,
                                                     'form': form, })
+
+
+def product_update(request, pk):
+    try:
+        usuario = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        usuario = None
+
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+
+        try:
+            if form.is_valid():
+                form.save()
+                messages.success(request, "O produto foi atualizado")
+
+        except Exception as e:
+            messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
+
+    else:
+        form = ProductForm(instance=product)
+
+    contex = {
+        'form': form,
+        'usuario': usuario,
+        'product': product,
+    }
+
+    return render(request, 'products/edit.html', contex)
 
 
 @login_required

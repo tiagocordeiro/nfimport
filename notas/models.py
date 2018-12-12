@@ -40,7 +40,7 @@ class Product(TimeStampedModel, Active):
         verbose_name_plural = 'máquinas'
 
     def __str__(self):
-        return self.maquina_pt
+        return str(self.maquina_pt + ' - ' + self.tipo_pt + ' - ' + self.modelo_pt)
 
 
 class Nota(TimeStampedModel, Active):
