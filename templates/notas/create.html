@@ -5,16 +5,17 @@
 {% block page-title %}Notas{% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'nota_list' %}">Notas</a></li>
-    <li class="breadcrumb-item active"><span>Cadastro</span></li>
+  <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'nota_list' %}">Notas</a></li>
+  <li class="breadcrumb-item active"><span>Cadastro</span></li>
 {% endblock %}
 
 {% block content %}
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-<script>
-$(document).ready(function(){
-    $("#add-item").click(function(ev) {
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+          crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      $("#add-item").click(function (ev) {
         ev.preventDefault();
         var count = $('#nota').children().length;
         var tmplMarkup = $("#item-nota").html();
@@ -26,146 +27,163 @@ $(document).ready(function(){
 
         // some animate to scroll to view our new form
         $('html, body').animate({
-            scrollTop: $("#add-item").position().top-200
+          scrollTop: $("#add-item").position().top - 200
         }, 800);
+      });
     });
-});
-</script>
-<!-- Main Content Start -->
-<section class="main--content">
+  </script>
+  <!-- Main Content Start -->
+  <section class="main--content">
     <div class="panel">
-        <!-- Records Header Start -->
-        <div class="records--header">
-            <div class="title fa-shopping-bag">
-                <h3 class="h3">Notas <a href="{% url 'nota_list' %}" class="btn btn-sm btn-outline-info">Ver tudo</a></h3>
-            </div>
+      <!-- Records Header Start -->
+      <div class="records--header">
+        <div class="title fa-shopping-bag">
+          <h3 class="h3">Notas <a href="{% url 'nota_list' %}" class="btn btn-sm btn-outline-info">Ver tudo</a></h3>
         </div>
-        <!-- Records Header End -->
+      </div>
+      <!-- Records Header End -->
     </div>
 
     <div class="panel">
-        <!-- Edit Product Start -->
-        <div class="records--body">
-            <div class="title">
-                <h6 class="h6">Detalhes</h6>
-            </div>
-            <form action="{% url 'nota_create' %}" method="post">
-            {% csrf_token %}
-
-            <!-- Tabs Nav Start -->
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a href="#tab01" data-toggle="tab" class="nav-link active">Informações</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#tab02" data-toggle="tab" class="nav-link">Itens</a>
-                </li>
-            </ul>
-            <!-- Tabs Nav End -->
-
-            <!-- Tab Content Start -->
-            <div class="tab-content">
-                <!-- Tab Pane Start -->
-                <div class="tab-pane fade show active" id="tab01">
-                    <div class="form-group row">
-                        <span class="label-text col-md-2 col-form-label">Descrição:</span>
-
-                        <div class="col-md-10">
-                            {{ notaform.description }}
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <span class="label-text col-md-2 col-form-label">Data:</span>
-
-                        <div class="col-md-10">
-                            {{ notaform.date }}
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <span class="label-text col-md-2 col-form-label">Dolar do dia:</span>
-
-                        <div class="col-md-10">
-                            {{ notaform.dolar_dia }}
-                        </div>
-                    </div>
-                </div>
-                <!-- Tab Pane End -->
-
-                <!-- Tab Pane Start -->
-                <div class="tab-pane fade" id="tab02">
-                    <!-- Form Group Start -->
-                    <div class="row form-row spacer">
-                        <div class="input-group">
-                            <div class="col-lg-7 col-md-12 col-sm-12">
-                                Máquina
-                            </div>
-                            <div class="col-lg-2 col-md-5 col-sm-5">
-                                Quantidade
-                            </div>
-                            <div class="col-lg-2 col-md-5 col-sm-5">
-                                Valor
-                            </div>
-                            <div class="col-lg-1 col-md-2 col-sm-2">
-
-                            </div>
-                        </div>
-                    </div>
-                <div id="nota">
-                    {{ formset.management_form }}
-                    {% for form in formset %}
-                    <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
-                        <div class="input-group">
-                            <div class="col-lg-8 col-md-12 col-sm-12">
-                                {{form.item}}
-                            </div>
-                            <div class="col-lg-2 col-md-6 col-sm-6">
-                                {{form.quantidade}}
-                            </div>
-                            <div class="col-lg-2 col-md-6 col-sm-6">
-                                {{form.valor_usd}}
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <a class="btn btn-info" id="add-item"><i class="fa fa-plus"></i> Add Item</a>
-                    <!-- Form Group End -->
-                </div>
-                <!-- Tab Pane End -->
-            </div>
-            <!-- Tab Content End -->
-            <div class="row mt-3">
-                <div class="col-12">
-                    <a href="{% url 'nota_list' %}" class="btn btn-rounded btn-danger">Cancelar</a>
-                    <input type="submit" value="Adicionar" class="btn btn-rounded btn-success">
-                </div>
-            </div>
-            </form>
+      <!-- Edit Product Start -->
+      <div class="records--body">
+        <div class="title">
+          <h6 class="h6">Detalhes</h6>
         </div>
-        <!-- Edit Product End -->
+        <form action="{% url 'nota_create' %}" method="post">
+          {% csrf_token %}
+
+          <!-- Tabs Nav Start -->
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a href="#tab01" data-toggle="tab" class="nav-link active">Informações</a>
+            </li>
+            <li class="nav-item">
+              <a href="#tab02" data-toggle="tab" class="nav-link">Itens</a>
+            </li>
+          </ul>
+          <!-- Tabs Nav End -->
+
+          <!-- Tab Content Start -->
+          <div class="tab-content">
+            <!-- Tab Pane Start -->
+            <div class="tab-pane fade show active" id="tab01">
+              <div class="form-group row">
+                <span class="label-text col-md-2 col-form-label">Descrição:</span>
+
+                <div class="col-md-10">
+                  {{ notaform.description }}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <span class="label-text col-md-2 col-form-label">Data:</span>
+
+                <div class="col-md-10">
+                  {{ notaform.date }}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <span class="label-text col-md-2 col-form-label">Dolar do dia:</span>
+
+                <div class="col-md-10">
+                  {{ notaform.dolar_dia }}
+                </div>
+              </div>
+            </div>
+            <!-- Tab Pane End -->
+
+            <!-- Tab Pane Start -->
+            <div class="tab-pane fade" id="tab02">
+              <!-- Form Group Start -->
+              <div class="row form-row spacer">
+                <div class="input-group">
+                  <div class="col-lg-7 col-md-12 col-sm-12">
+                    Máquina
+                  </div>
+                  <div class="col-lg-2 col-md-5 col-sm-5">
+                    Quantidade
+                  </div>
+                  <div class="col-lg-2 col-md-5 col-sm-5">
+                    Valor
+                  </div>
+                  <div class="col-lg-1 col-md-2 col-sm-2">
+
+                  </div>
+                </div>
+              </div>
+              <div id="nota">
+                {{ formset.management_form }}
+                {% for form in formset %}
+                  <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
+                    <div class="input-group">
+                      <div class="col-lg-8 col-md-12 col-sm-12">
+                        {{ form.item }}
+                      </div>
+                      <div class="col-lg-2 col-md-6 col-sm-6">
+                        {{ form.quantidade }}
+                      </div>
+                      <div class="col-lg-2 col-md-6 col-sm-6">
+                        {{ form.valor_usd }}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              <a class="btn btn-info" id="add-item"><i class="fa fa-plus"></i> Add Item</a>
+              <!-- Form Group End -->
+            </div>
+            <!-- Tab Pane End -->
+          </div>
+          <!-- Tab Content End -->
+          <div class="row mt-3">
+            <div class="col-12">
+              <a href="{% url 'nota_list' %}" class="btn btn-rounded btn-danger">Cancelar</a>
+              <input type="submit" value="Adicionar" class="btn btn-rounded btn-success">
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Edit Product End -->
     </div>
-</section>
-<script type="text/html" id="item-nota">
+  </section>
+  <script type="text/html" id="item-nota">
     <div id="item-__prefix__" style="margin-top: 10px" class="form-group">
-        {% for form in formset %}
+      {% for form in formset %}
         <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
-            <div class="input-group">
-                <div class="col-lg-8 col-md-12 col-sm-12">
-                    {{form.item}}
-                </div>
-                <div class="col-lg-2 col-md-6 col-sm-6">
-                    {{form.quantidade}}
-                </div>
-                <div class="col-lg-2 col-md-6 col-sm-6">
-                    {{form.valor_usd}}
-                </div>
+          <div class="input-group">
+            <div class="col-lg-8 col-md-12 col-sm-12">
+              {{ form.item }}
             </div>
+            <div class="col-lg-2 col-md-6 col-sm-6">
+              {{ form.quantidade }}
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-6">
+              {{ form.valor_usd }}
+            </div>
+          </div>
         </div>
-        {% endfor %}
+      {% endfor %}
 
     </div>
-</script>
-<!-- Main Content End -->
+  </script>
+  <!-- Main Content End -->
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    // window.onload
+    window.onload = function () {
+      cumstomCheckBox();
+    };
+
+    function cumstomCheckBox() {
+      var checkbox = document.querySelector("#div_id_product-1-DELETE > label").innerHTML;
+      var res = checkbox.replace(checkbox, ' <input type="checkbox" name="product-1-DELETE" class="checkboxinput form-check-input" id="id_product-1-DELETE">\n' +
+          '                    Apagar Replace\n' +
+          '                ');
+      document.querySelector("#div_id_product-1-DELETE > label").innerHTML = res;
+    }
+  </script>
 {% endblock %}
