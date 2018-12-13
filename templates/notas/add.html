@@ -99,3 +99,31 @@
 </section>
 <!-- Main Content End -->
 {% endblock %}
+
+{% block extra_scripts %}
+  <script>
+
+    document.querySelector("#add-item").addEventListener("click", function() {
+      document.getElementsByClassName("form-check-label")[0].classList.add("form-check");
+      document.getElementsByClassName("form-check-label")[0].classList.remove("form-check-label");
+
+      var customCheck = " <label for=\"id_product-1-DELETE\" class=\"form-check\"> <input type=\"checkbox\" name=\"product-1-DELETE\" class=\"checkboxinput form-check-input\" id=\"id_product-1-DELETE\">\n" +
+          "                    <span class=\"form-check-label\">Apagar</span>\n" +
+          "                </label> ";
+      document.querySelectorAll(".form-check")[0].innerHTML = customCheck;
+
+    });
+    // window.onload
+    window.onload = function () {
+      cumstomCheckBox();
+    };
+
+    function cumstomCheckBox() {
+      var checkbox = document.querySelector("#div_id_product-1-DELETE > label").innerHTML;
+      var res = checkbox.replace(checkbox, ' <input type="checkbox" name="product-1-DELETE" class="checkboxinput form-check-input" id="id_product-1-DELETE">\n' +
+          '                    Apagar Replace\n' +
+          '                ');
+      document.querySelector("#div_id_product-1-DELETE > label").innerHTML = res;
+    }
+  </script>
+{% endblock %}
