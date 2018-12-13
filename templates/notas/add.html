@@ -26,9 +26,15 @@
             $('#id_product-TOTAL_FORMS').attr('value', count + 1);
 
             // update css
-            $('.input-group')[count].childNodes[1].className = 'col-lg-8 col-md-12 col-sm-12'
-            $('.input-group')[count].childNodes[3].className = 'col-lg-2 col-md-6 col-sm-6'
-            $('.input-group')[count].childNodes[5].className = 'col-lg-2 col-md-6 col-sm-6'
+            $('.input-group')[count].childNodes[1].className = 'col-lg-6 col-md-12 col-sm-12';
+            $('.input-group')[count].childNodes[3].className = 'col-lg-2 col-md-5 col-sm-5';
+            $('.input-group')[count].childNodes[5].className = 'col-lg-2 col-md-5 col-sm-5';
+            $('.input-group')[count].childNodes[7].className = 'col-lg-2 col-md-2 col-sm-2';
+
+            // Ajusta Checkbox
+            $('.input-group')[count].childNodes[7].childNodes[1].childNodes[1].childNodes[1].className = 'form-checkbox';
+            var html = $('label[for="id_product-' + count + '-DELETE"]').html().replace('Apagar','<span class="form-check-label">Apagar</span>');
+            $('label[for="id_product-' + count + '-DELETE"]').html(html);
         });
     });
 </script>
@@ -59,14 +65,17 @@
                 {% for item_nota_form in formset %}
                     <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
                         <div class="input-group">
-                            <div class="col-lg-8 col-md-12 col-sm-12">
+                            <div class="col-lg-6 col-md-12 col-sm-12">
                                 {{ item_nota_form.item|as_crispy_field }}
                             </div>
-                            <div class="col-lg-2 col-md-6 col-sm-6">
+                            <div class="col-lg-2 col-md-5 col-sm-5">
                                 {{ item_nota_form.quantidade|as_crispy_field }}
                             </div>
-                            <div class="col-lg-2 col-md-6 col-sm-6">
+                            <div class="col-lg-2 col-md-5 col-sm-5">
                                 {{ item_nota_form.valor_usd|as_crispy_field }}
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2" style="margin: 42px 0 0 0;">
+                                {{ item_nota_form.DELETE|as_crispy_field }}
                             </div>
                         </div>
                     </div>
@@ -91,39 +100,46 @@
     <script type="text/html" id="item-nota">
         <div id="item-__prefix__" style="margin-top: 10px" class="row form-row spacer">
             <div class="input-group">
-              {{ formset.empty_form|crispy }}
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    {{ formset.empty_form.item|as_crispy_field }}
+                </div>
+                <div class="col-lg-2 col-md-5 col-sm-5">
+                    {{ formset.empty_form.quantidade|as_crispy_field }}
+                </div>
+                <div class="col-lg-2 col-md-5 col-sm-5">
+                    {{ formset.empty_form.valor_usd|as_crispy_field }}
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2" style="margin: 42px 0 0 0;">
+                    {{ formset.empty_form.DELETE|as_crispy_field }}
+                </div>
             </div>
         </div>
+    </script>
+
+    <script type="text/html" id="custom-checkbox">
+        <label for="id_product-__prefix__-DELETE" class="form-check">
+          <input type="checkbox" name="product-__prefix__-DELETE" class="checkboxinput form-check-input" id="id_product-__prefix__-DELETE">
+          <span class="form-check-label">Apagar</span>
+        </label>
     </script>
 
 </section>
 <!-- Main Content End -->
 {% endblock %}
 
+
 {% block extra_scripts %}
   <script>
-
-    document.querySelector("#add-item").addEventListener("click", function() {
-      document.getElementsByClassName("form-check-label")[0].classList.add("form-check");
-      document.getElementsByClassName("form-check-label")[0].classList.remove("form-check-label");
-
-      var customCheck = " <label for=\"id_product-1-DELETE\" class=\"form-check\"> <input type=\"checkbox\" name=\"product-1-DELETE\" class=\"checkboxinput form-check-input\" id=\"id_product-1-DELETE\">\n" +
-          "                    <span class=\"form-check-label\">Apagar</span>\n" +
-          "                </label> ";
-      document.querySelectorAll(".form-check")[0].innerHTML = customCheck;
-
-    });
     // window.onload
     window.onload = function () {
       cumstomCheckBox();
     };
-
-    function cumstomCheckBox() {
-      var checkbox = document.querySelector("#div_id_product-1-DELETE > label").innerHTML;
-      var res = checkbox.replace(checkbox, ' <input type="checkbox" name="product-1-DELETE" class="checkboxinput form-check-input" id="id_product-1-DELETE">\n' +
-          '                    Apagar Replace\n' +
-          '                ');
-      document.querySelector("#div_id_product-1-DELETE > label").innerHTML = res;
+     function cumstomCheckBox() {
+      var checkbox = document.querySelector("#div_id_product-0-DELETE > label").innerHTML;
+      var res = checkbox.replace(checkbox, '<input type="checkbox" name="product-0-DELETE" class="checkboxinput form-check-input" id="id_product-0-DELETE">\n' +
+          '<span class="form-check-label">Apagar</span>');
+      document.querySelector("#div_id_product-0-DELETE > label").innerHTML = res;
+      document.querySelector("#div_id_product-0-DELETE > label").className='form-check';
     }
   </script>
 {% endblock %}
