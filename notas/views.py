@@ -120,6 +120,49 @@ def nota_create(request):
     return render(request, 'notas/add.html', context)
 
 
+@login_required
+def nota_update(request, pk):
+    try:
+        usuario = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        usuario = None
+
+    nota = get_object_or_404(Nota, pk=pk)
+
+    item_nota_formset = inlineformset_factory(
+        Nota, NotaItens, form=NotaItensForm, extra=0, can_delete=True,
+        min_num=1, validate_min=True,
+    )
+
+    if request.method == 'POST':
+        forms = NotaForm(request.POST, instance=nota, prefix='main')
+        formset = item_nota_formset(request.POST, instance=nota, prefix='product')
+
+        try:
+            if forms.is_valid() and formset.is_valid():
+                # forms = forms.save(commit=False)
+                # forms.added_by = request.user
+                forms.save()
+                formset.save()
+                messages.success(request, "A nota foi atualizado")
+                return redirect(nota_list)
+
+        except Exception as e:
+            messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
+
+    else:
+        forms = NotaForm(instance=nota, prefix='main')
+        formset = item_nota_formset(instance=nota, prefix='product')
+
+    context = {
+        'nota': nota,
+        'forms': forms,
+        'formset': formset,
+        'usuario': usuario,
+    }
+
+    return render(request, 'notas/edit.html', context)
+
 class NotaView(CreateView):
     template_name = 'notas/nota_view.html'
     form_class = NotaForm
