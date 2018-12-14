@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views.generic import CreateView
 
 from core.models import UserProfile
@@ -128,6 +128,7 @@ def nota_update(request, pk):
         usuario = None
 
     nota = get_object_or_404(Nota, pk=pk)
+    # nota_itens = get_list_or_404(NotaItens, nota_id=nota)
 
     item_nota_formset = inlineformset_factory(
         Nota, NotaItens, form=NotaItensForm, extra=0, can_delete=True,
@@ -144,7 +145,7 @@ def nota_update(request, pk):
                 # forms.added_by = request.user
                 forms.save()
                 formset.save()
-                messages.success(request, "A nota foi atualizado")
+                messages.success(request, "A nota foi atualizada")
                 return redirect(nota_list)
 
         except Exception as e:
