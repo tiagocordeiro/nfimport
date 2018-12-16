@@ -81,6 +81,7 @@
             {% for item_nota_form in formset %}
               <div id="item-{{ forloop.counter0 }}" class="row form-row spacer">
                 <div class="input-group">
+                  {{ item_nota_form.id }}
                   <div class="col-lg-6 col-md-12 col-sm-12">
                     {{ item_nota_form.item|as_crispy_field }}
                   </div>
