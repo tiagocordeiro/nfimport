@@ -54,12 +54,13 @@ def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, instance=product)
+        form = ProductForm(request.POST, request.FILES, instance=product)
 
         try:
             if form.is_valid():
                 form.save()
                 messages.success(request, "O produto foi atualizado")
+                return redirect(product_list)
 
         except Exception as e:
             messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))

@@ -29,6 +29,16 @@
             <div class="title">
                 <h6 class="h6">Detalhes</h6>
 
+                {% if form.errors %}
+                  {{ form.errors }}
+                {% endif %}
+
+                {% if messages %}
+                  {% for message in messages %}
+                    <div class="card-panel amber lighten-4">{{ message }}</div>
+                  {% endfor %}
+                {% endif %}
+
                 <a href="#" class="btn btn-rounded btn-danger">Cancelar</a>
             </div>
             <form action="{% url 'product_update' pk=product.pk %}" method="post" enctype="multipart/form-data">

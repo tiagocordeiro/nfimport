@@ -8,6 +8,7 @@ local = os.path.dirname(__file__)
 def create_products():
     file = str(local + '/csv_data/products.csv')
     df = pd.read_csv(file)
+    df.fillna('', inplace=True)
 
     products = []
 
