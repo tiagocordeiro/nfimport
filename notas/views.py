@@ -1,5 +1,6 @@
 import csv
 
+import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
@@ -186,6 +187,50 @@ def nota_export_csv(request, pk):
                    item.item.opcionais, item.item.imagem, item.quantidade, item.valor_usd]
         writer.writerow(colunas)
 
+    return response
+
+
+def nota_export_xls(request, pk):
+    nota = get_object_or_404(Nota, pk=pk)
+    nota_itens = nota.notaitens_set.all()
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="notaImportacao.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Itens da Nota')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+               'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
+               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt', 'item__modelo_pt', 'item__area_trabalho_pt',
+                                  'item__eixo_z_pt', 'item__cor_pt', 'item__faz_pt', 'item__voltagem_pt',
+                                  'item__ncm', 'item__nome_classificacao', 'item__caixa_lateral_base',
+                                  'item__opcionais', 'item__imagem', 'quantidade', 'valor_usd')
+
+    # ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+    #  'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
+    #  'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
     return response
 
 
