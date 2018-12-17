@@ -9,6 +9,6 @@ urlpatterns = [
     path('notas/', views.nota_list, name='nota_list'),
     path('notas/add/', views.nota_create, name='nota_create'),
     path('nota/edit/<pk>/', views.nota_update, name='nota_update'),
-    # path('notas/cbv/', views.NotaView.as_view(), name='nota_cbv'),
-    # path('notas/edit/<pk>', views.NotaEdit.as_view(), name='nota_edit'),
+    path('nota/export/csv/<pk>/', views.nota_export_csv, name='nota_export_csv'),
+    path('nota/export/xls/<pk>/', views.nota_export_xls, name='nota_export_xls'),
 ]

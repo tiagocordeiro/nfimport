@@ -29,7 +29,7 @@
                     {% for nota in notas %}
                     <tr>
                         <td>
-                            <a href="#" class="btn-link">
+                            <a href="{% url 'nota_update' pk=nota.pk %}" class="btn-link">
                                 {{ nota.description }}
                             </a>
                         </td>
@@ -42,8 +42,9 @@
                                 <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
 
                                 <div class="dropdown-menu">
-                                    <a href="#" class="dropdown-item">Editar</a>
-                                    <a href="#" class="dropdown-item">Detalhes</a>
+                                    <a href="{% url 'nota_update' pk=nota.pk %}" class="dropdown-item">Editar</a>
+                                    <a href="{% url 'nota_export_csv' pk=nota.pk %}" class="dropdown-item">CSV</a>
+                                    <a href="{% url 'nota_export_xls' pk=nota.pk %}" class="dropdown-item">XLS</a>
                                 </div>
                             </div>
                         </td>
