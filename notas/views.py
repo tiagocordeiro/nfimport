@@ -1,7 +1,9 @@
+import csv
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.views.generic import CreateView
 
 from core.models import UserProfile
@@ -163,6 +165,29 @@ def nota_update(request, pk):
     }
 
     return render(request, 'notas/edit.html', context)
+
+
+def nota_export_csv(request, pk):
+    nota = get_object_or_404(Nota, pk=pk)
+    nota_itens = nota.notaitens_set.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="notaImportacao.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+                     'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
+                     'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD'])
+
+    for item in nota_itens:
+        colunas = [item.item.maquina_pt, item.item.tipo_pt, item.item.modelo_pt, item.item.area_trabalho_pt,
+                   item.item.eixo_z_pt, item.item.cor_pt, item.item.faz_pt, item.item.voltagem_pt,
+                   item.item.ncm, item.item.nome_classificacao, item.item.caixa_lateral_base,
+                   item.item.opcionais, item.item.imagem, item.quantidade, item.valor_usd]
+        writer.writerow(colunas)
+
+    return response
+
 
 class NotaView(CreateView):
     template_name = 'notas/nota_view.html'
