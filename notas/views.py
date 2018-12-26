@@ -1,5 +1,10 @@
 import csv
+import io
+import ssl
+from io import BytesIO
+from urllib.request import urlopen
 
+import xlsxwriter
 import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -232,6 +237,68 @@ def nota_export_xls(request, pk):
             ws.write(row_num, col_num, row[col_num], font_style)
 
     wb.save(response)
+    return response
+
+
+def nota_export_xlsx(request, pk):
+    nota = get_object_or_404(Nota, pk=pk)
+    nota_itens = nota.notaitens_set.all()
+
+    ssl._create_default_https_context = ssl._create_unverified_context
+    output = io.BytesIO()
+
+    wb = xlsxwriter.Workbook(output)
+    ws = wb.add_worksheet()
+
+    # Sheet header, first row
+    row_num = 0
+
+    # font_style = xlwt.XFStyle()
+    # font_style.font.bold = True
+
+    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+               'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
+               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num])
+
+    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt', 'item__modelo_pt', 'item__area_trabalho_pt',
+                                  'item__eixo_z_pt', 'item__cor_pt', 'item__faz_pt', 'item__voltagem_pt',
+                                  'item__ncm', 'item__nome_classificacao', 'item__caixa_lateral_base',
+                                  'item__opcionais', 'item__imagem', 'quantidade', 'valor_usd')
+
+    for row in rows:
+        try:
+            imagem = nota.notaitens_set.all()[row_num].item.imagem.url
+        except ValueError:
+            imagem = ''
+
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.set_row(row_num, 80)
+            ws.write(row_num, col_num, row[col_num])
+
+        if row[12] is not '':
+            image_data = BytesIO(urlopen(imagem).read())
+            ws.insert_image(row_num, 16, imagem, {'image_data': image_data,
+                                                  'positioning': 1,
+                                                  'x_scale': 0.5,
+                                                  'y_scale': 0.5})
+
+    # Close the workbook before sending the data.
+    wb.close()
+
+    # Rewind the buffer.
+    output.seek(0)
+
+    filename = 'notaImportacao.xlsx'
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
     return response
 
 
