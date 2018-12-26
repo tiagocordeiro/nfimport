@@ -1,14 +1,18 @@
 import csv
+import io
+import ssl
+from io import BytesIO
+from urllib.request import urlopen
 
+import xlsxwriter
 import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.views.generic import CreateView
 
 from core.models import UserProfile
-from .forms import ProductForm, NotaForm, NotaItensFormSet, NotaItensForm
+from .forms import ProductForm, NotaForm, NotaItensForm
 from .models import Product, Nota, NotaItens
 
 
@@ -132,7 +136,6 @@ def nota_update(request, pk):
         usuario = None
 
     nota = get_object_or_404(Nota, pk=pk)
-    # nota_itens = get_list_or_404(NotaItens, nota_id=nota)
 
     item_nota_formset = inlineformset_factory(
         Nota, NotaItens, form=NotaItensForm, extra=0, can_delete=True,
@@ -145,8 +148,6 @@ def nota_update(request, pk):
 
         try:
             if forms.is_valid() and formset.is_valid():
-                # forms = forms.save(commit=False)
-                # forms.added_by = request.user
                 forms.save()
                 formset.save()
                 messages.success(request, "A nota foi atualizada")
@@ -222,10 +223,6 @@ def nota_export_xls(request, pk):
                                   'item__ncm', 'item__nome_classificacao', 'item__caixa_lateral_base',
                                   'item__opcionais', 'item__imagem', 'quantidade', 'valor_usd')
 
-    # ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
-    #  'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
-    #  'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
-
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
@@ -235,38 +232,60 @@ def nota_export_xls(request, pk):
     return response
 
 
-class NotaView(CreateView):
-    template_name = 'notas/nota_view.html'
-    form_class = NotaForm
+def nota_export_xlsx(request, pk):
+    nota = get_object_or_404(Nota, pk=pk)
+    nota_itens = nota.notaitens_set.all()
 
-    def get_context_data(self, **kwargs):
-        context = super(NotaView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['forms'] = NotaForm(self.request.POST)
-            context['formset'] = NotaItensFormSet(self.request.POST)
-            try:
-                context['usuario'] = UserProfile.objects.get(user=self.request.user)
-            except UserProfile.DoesNotExist:
-                context['usuario'] = None
-        else:
-            context['forms'] = NotaForm()
-            context['formset'] = NotaItensFormSet()
-            try:
-                context['usuario'] = UserProfile.objects.get(user=self.request.user)
-            except UserProfile.DoesNotExist:
-                context['usuario'] = None
-        return context
+    ssl._create_default_https_context = ssl._create_unverified_context
+    output = io.BytesIO()
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        forms = context['forms']
-        formset = context['formset']
-        if forms.is_valid() and formset.is_valid():
-            self.object = form.save()
-            forms.instance = self.object
-            formset.instance = self.object
-            forms.save()
-            formset.save()
-            return redirect('nota_list')
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
+    wb = xlsxwriter.Workbook(output)
+    ws = wb.add_worksheet()
+
+    # Sheet header, first row
+    row_num = 0
+
+    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+               'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
+               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num])
+
+    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt', 'item__modelo_pt', 'item__area_trabalho_pt',
+                                  'item__eixo_z_pt', 'item__cor_pt', 'item__faz_pt', 'item__voltagem_pt',
+                                  'item__ncm', 'item__nome_classificacao', 'item__caixa_lateral_base',
+                                  'item__opcionais', 'item__imagem', 'quantidade', 'valor_usd')
+
+    for row in rows:
+        try:
+            imagem = nota.notaitens_set.all()[row_num].item.imagem.url
+        except ValueError:
+            imagem = ''
+
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.set_row(row_num, 80)
+            ws.write(row_num, col_num, row[col_num])
+
+        if row[12] is not '':
+            image_data = BytesIO(urlopen(imagem).read())
+            ws.insert_image(row_num, 16, imagem, {'image_data': image_data,
+                                                  'positioning': 1,
+                                                  'x_scale': 0.5,
+                                                  'y_scale': 0.5})
+
+    # Close the workbook before sending the data.
+    wb.close()
+
+    # Rewind the buffer.
+    output.seek(0)
+
+    filename = 'notaImportacao.xlsx'
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+    return response
