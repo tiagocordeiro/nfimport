@@ -23,5 +23,5 @@ script:
 #  - flake8 casaconceito/ parceiros/ pages/
 #  - py.test --cov=pytocli tests/
 #  - python -m doctest README.md
-# after_success:
-#  - coveralls
+after_success:
+  - codecov

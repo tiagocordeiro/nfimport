@@ -1,0 +1,5 @@
+[run]
+source=nfi
+omit =
+    # omit anything in venv directory anywhere
+    */venv/*
