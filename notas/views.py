@@ -272,8 +272,8 @@ def nota_export_xlsx(request, pk):
             image_data = BytesIO(urlopen(imagem).read())
             ws.insert_image(row_num, 16, imagem, {'image_data': image_data,
                                                   'positioning': 1,
-                                                  'x_scale': 0.5,
-                                                  'y_scale': 0.5})
+                                                  'x_scale': 0.1,
+                                                  'y_scale': 0.1})
 
     # Close the workbook before sending the data.
     wb.close()
