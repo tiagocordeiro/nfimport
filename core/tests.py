@@ -2,6 +2,7 @@ from django.contrib.auth.models import AnonymousUser, User, Group
 from django.test import RequestFactory, TestCase
 
 from .views import dashboard, profile, profile_update
+from .forms import ProfileForm
 
 
 class CoreViewsTest(TestCase):
@@ -53,3 +54,27 @@ class CoreViewsTest(TestCase):
 
         response = profile_update(request)
         self.assertEqual(response.status_code, 200)
+
+    # Valid Form Data
+    def test_ProfileForm_valid(self):
+        form = ProfileForm(data={'email': "jacob@mg.com", 'password': "top_secret", 'first_name': "jacob"})
+        self.assertTrue(form.is_valid())
+
+    # Invalid Form Data
+    def test_ProfileForm_invalid(self):
+        form = ProfileForm(data={'email': "jacob@...", 'password': "123", 'first_name': ""})
+        self.assertFalse(form.is_valid())
+
+    def test_ProfileForm_change_first_name(self):
+        request = self.factory.get('/profile/update')
+        request.user = self.user
+
+        response = profile_update(request)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(self.user.first_name, '')
+
+        self.user.first_name = 'Jacob'
+        self.user.save()
+
+        self.assertEqual(self.user.first_name, 'Jacob')
