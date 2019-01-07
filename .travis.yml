@@ -17,9 +17,9 @@ before_script:
   - python manage.py migrate --noinput
 # command to run tests
 script:
-  - pycodestyle nfi/ core/ notas/
-  - pyflakes nfi/ core/ notas/
-  - coverage run manage.py test -v 2
+  - pycodestyle nfi/ core/ notas/ utils/
+  - pyflakes nfi/ core/ notas/ utils/
+  - coverage run --source='.' manage.py test -v 2
 #  - python manage.py test -v 2
 #  - flake8 casaconceito/ parceiros/ pages/
 #  - py.test --cov=pytocli tests/
