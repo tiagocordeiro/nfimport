@@ -11,7 +11,7 @@ addons:
 # command to install dependencies
 install:
   - cp contrib/env-sample .env
-  - pip install -r requirements-dev.txt
+  - pip install -r requirements-dev.txt codecov
 before_script:
   - psql -c "CREATE DATABASE travis_ci_db;" -U postgres
   - python manage.py migrate --noinput
@@ -19,7 +19,8 @@ before_script:
 script:
   - pycodestyle nfi/ core/ notas/
   - pyflakes nfi/ core/ notas/
-  - python manage.py test -v 2
+  - coverage run manage.py test -v 2
+#  - python manage.py test -v 2
 #  - flake8 casaconceito/ parceiros/ pages/
 #  - py.test --cov=pytocli tests/
 #  - python -m doctest README.md
