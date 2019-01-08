@@ -196,7 +196,7 @@ class NotasViewsTest(TestCase):
                 'product-0-valor_usd': 1000}
 
         nota_forms = Nota()
-        item_nota_formset = inlineformset_factory(Nota, NotaItens, form=NotaItensForm, min_num=1, validate_min=True,)
+        item_nota_formset = inlineformset_factory(Nota, NotaItens, form=NotaItensForm, min_num=1, validate_min=True, )
         forms = NotaForm(data, instance=nota_forms, prefix='main')
         formset = item_nota_formset(data, instance=nota_forms, prefix='product')
 
@@ -206,3 +206,25 @@ class NotasViewsTest(TestCase):
         response = self.client.post(reverse('nota_create'), data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('nota_list'))
+
+    def test_nota_view_update(self):
+        nota = self.nota
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('nota_update', kwargs={'pk': nota.id}),
+                                    data={'main-description': 'Teste Editado',
+                                          'main-date_day': 8,
+                                          'main-date_month': 1,
+                                          'main-date_year': 2019,
+                                          'main-dolar_dia': 3.12,
+                                          'product-TOTAL_FORMS': 1,
+                                          'product-INITIAL_FORMS': 0,
+                                          'product-MIN_NUM_FORMS': 1,
+                                          'product-MAX_NUM_FORMS': 1000,
+                                          'product-0-item': self.product.pk,
+                                          'product-0-quantidade': 2,
+                                          'product-0-valor_usd': 2000})
+
+        self.assertEqual(response.status_code, 302)
+        nota.refresh_from_db()
+        self.assertEqual(nota.description, 'Teste Editado')
+        self.assertTrue(nota.notaitens_set.values().last()['valor_usd'], 2000)
