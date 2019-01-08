@@ -1,10 +1,11 @@
 from django.contrib.auth.models import AnonymousUser, User, Group
+from django.forms.models import inlineformset_factory
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .forms import ProductForm
-from .models import Nota, Product
+from .forms import ProductForm, NotaItensForm, NotaForm
+from .models import Nota, Product, NotaItens
 from .views import product_list, product_create, nota_list, nota_create, nota_update
 
 
@@ -29,6 +30,16 @@ class NotasViewsTest(TestCase):
                                               faz_pt='Faz testes',
                                               voltagem_pt='110v',
                                               ncm='111.222.333')
+
+        # Nota Itens
+        self.nota_itens = NotaItens.objects.create(item=self.product,
+                                                   nota=self.nota,
+                                                   quantidade=1,
+                                                   valor_usd=3.33)
+
+        # Nota Itens FormSet
+        self.item_nota_formset = inlineformset_factory(Nota, NotaItens, form=NotaItensForm,
+                                                       extra=0, can_delete=True, min_num=1, validate_min=True, )
 
     def test_product_list_anonimo(self):
         request = self.factory.get('/products')
@@ -165,3 +176,33 @@ class NotasViewsTest(TestCase):
 
         response = nota_update(request, pk=self.nota.pk)
         self.assertEqual(response.status_code, 200)
+
+    def test_retorno_nota_model(self):
+        nota = self.nota
+        self.assertTrue(nota.__str__(), nota.description)
+
+    def test_nota_view_create(self):
+        data = {'main-description': 'Teste',
+                'main-date_day': 8,
+                'main-date_month': 1,
+                'main-date_year': 2019,
+                'main-dolar_dia': 3.12,
+                'product-TOTAL_FORMS': 1,
+                'product-INITIAL_FORMS': 0,
+                'product-MIN_NUM_FORMS': 1,
+                'product-MAX_NUM_FORMS': 1000,
+                'product-0-item': self.product.pk,
+                'product-0-quantidade': 1,
+                'product-0-valor_usd': 1000}
+
+        nota_forms = Nota()
+        item_nota_formset = inlineformset_factory(Nota, NotaItens, form=NotaItensForm, min_num=1, validate_min=True,)
+        forms = NotaForm(data, instance=nota_forms, prefix='main')
+        formset = item_nota_formset(data, instance=nota_forms, prefix='product')
+
+        self.client.force_login(self.user)
+        self.assertEqual(forms.is_valid(), True)
+        self.assertEqual(formset.is_valid(), True)
+        response = self.client.post(reverse('nota_create'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('nota_list'))
