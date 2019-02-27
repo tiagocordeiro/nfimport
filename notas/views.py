@@ -268,7 +268,7 @@ def nota_export_xlsx(request, pk):
             ws.set_row(row_num, 80)
             ws.write(row_num, col_num, row[col_num])
 
-        if row[12] is not '':
+        if row[12] != '':
             image_data = BytesIO(urlopen(imagem).read())
             ws.insert_image(row_num, 16, imagem, {'image_data': image_data,
                                                   'positioning': 1,
