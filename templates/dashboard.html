@@ -11,91 +11,205 @@
 {% endblock %}
 
 {% block content %}
-<section class="main--content">
+  <section class="main--content">
     <div class="row gutter-20">
-        <div class="col-md-4">
-            <div class="panel">
-                <!-- Mini Stats Panel Start -->
-                <div class="miniStats--panel">
-                    <div class="miniStats--header bg-darker">
-                        <p class="miniStats--caption text-blue">Indicações</p>
+      <div class="col-md-4">
+        <div class="panel">
+          <!-- Mini Stats Panel Start -->
+          <div class="miniStats--panel">
+            <div class="miniStats--header bg-darker">
+              <p class="text-blue">Produtos</p>
 
-                        <p class="miniStats--label text-white bg-blue">
-                            <a class="text-white" href="#">
-                                <i class="fa fa-list"></i>
-                                <span>{{ indicacoes_qt }}</span>
-                            </a>
-                        </p>
-                    </div>
-
-
-                    <div class="miniStats--body">
-                        <i class="miniStats--icon fa fa-user text-blue"></i>
-
-                        <p class="miniStats--caption text-blue">Leads</p>
-                        <P><br></P>
-                        <a href="#" class="btn btn-sm btn-outline-info">Adicionar Novo</a>
-                    </div>
-                </div>
-                <!-- Mini Stats Panel End -->
+              <p class="miniStats--label text-white bg-blue">
+                <a class="text-white" href="{% url 'product_list' %}">
+                  <i class="fa fa-list"></i>
+                  <span>{{ produtos_qt }}</span>
+                </a>
+              </p>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="panel">
-                <!-- Mini Stats Panel Start -->
-                <div class="miniStats--panel">
-                    <div class="miniStats--header bg-darker">
-                        <p class="miniStats--caption text-orange">Indicações Ganhas</p>
+            <div class="miniStats--body">
+              <i class="miniStats--icon fa fa-shopping-cart text-blue"></i>
 
-
-                        <p class="miniStats--label text-white bg-orange">
-                            <a class="text-white" href="#">
-                                <i class="fa fa-list"></i>
-                                <span>{{ indicacoes_ganhas }}</span>
-                            </a>
-                        </p>
-                    </div>
-
-                    <div class="miniStats--body">
-                        <i class="miniStats--icon fa fa-rocket text-orange"></i>
-
-                        <p class="miniStats--caption text-orange">Leads</p>
-                        <br>
-                        <a href="#" class="btn btn-sm btn-outline-warning">Indicações</a>
-                    </div>
-                </div>
-                <!-- Mini Stats Panel End -->
+              <p class="miniStats--caption text-blue">Produtos</p>
+              <h3 class="miniStats--title h4">disponíveis</h3>
+              <p class="miniStats--num text-blue">{{ produtos_qt }}</p>
             </div>
+          </div>
+          <!-- Mini Stats Panel End -->
         </div>
+      </div>
 
-        <div class="col-md-4">
-            <div class="panel">
-                <!-- Mini Stats Panel Start -->
-                <div class="miniStats--panel">
-                    <div class="miniStats--header bg-darker">
-                        <p class="miniStats--caption text-green">R$ Ganhos</p>
+      <div class="col-md-4">
+        <div class="panel">
+          <!-- Mini Stats Panel Start -->
+          <div class="miniStats--panel">
+            <div class="miniStats--header bg-darker">
+              <p class="text-orange">Notas</p>
 
-                        <p class="miniStats--label text-white bg-green">
-                            <a class="text-white" href="#">
-                                <i class="fa fa-money-bill-alt"></i>
-                                <span>{{ total_ganho|default_if_none:"0"|intcomma }}</span>
-                            </a>
-                        </p>
-                    </div>
-
-                    <div class="miniStats--body">
-                        <i class="miniStats--icon fa fa-dollar-sign text-green"></i>
-
-                        <p class="miniStats--caption text-green">Comissão</p>
-                        <br>
-                        <a href="#" class="btn btn-sm btn-outline-success">Relatórios</a>
-                    </div>
-                </div>
-                <!-- Mini Stats Panel End -->
+              <p class="miniStats--label text-white bg-orange">
+                <a class="text-white" href="{% url 'nota_list' %}">
+                  <i class="fa fa-list"></i>
+                    <span>{{ notas_qt }}</span>
+                </a>
+              </p>
             </div>
-        </div>
 
+            <div class="miniStats--body">
+              <i class="miniStats--icon fa fa-ticket-alt text-orange"></i>
+
+              <p class="miniStats--caption text-orange">Total nas</p>
+              <h3 class="miniStats--title h4">Notas</h3>
+              <p class="miniStats--num text-orange">$ {{ notas_total }}</p>
+            </div>
+          </div>
+          <!-- Mini Stats Panel End -->
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <!-- Panel Start -->
+        <div class="panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">NF Import</h3>
+          </div>
+
+          <div class="panel-content panel-about" style="padding: 10px 20px 14px;">
+            <p>S.I.E. - Sistema Integrado Empresarial</p>
+            <table>
+              <tr>
+                <th>1 USD x CNY (Remimbi):</th>
+                <td><i class="fas fa-calendar"></i> {{ last_cny_data }} ¥ {{ last_cny_valor }}</td>
+              </tr>
+              <tr>
+                <th>1 USD x BRL (Real)</th>
+                <td><i class="fas fa-calendar"></i> {{ last_brl_data }} ₨ {{ last_brl_valor }}</td>
+              </tr>
+              <tr>
+                <th><i class="fa fa-shopping-cart"></i>Produtos:</th>
+                <td>{{ produtos_qt }}</td>
+              </tr>
+              <tr>
+                <th><i class="fa fa-ticket-alt"></i>Notas:</th>
+                <td>{{ notas_qt }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- Panel End -->
+      </div>
+
+      <div class="col-xl-6 col-md-6">
+        <div class="panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">1 USD x CNY (Remimbi)</h3>
+
+            <div class="dropdown">
+              <button type="button" class="btn-link dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-ellipsis-v"></i>
+              </button>
+
+              <ul class="dropdown-menu">
+                <li><a href="#">This Week</a></li>
+                <li><a href="#">Last Week</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel-chart">
+            <!-- Morris Line Chart 01 Start -->
+            <div id="morrisLineChartCotacaoUSD_CNY" class="chart--body line--chart style--1"></div>
+            <!-- Morris Line Chart 01 End -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6 col-md-6">
+        <div class="panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">1 USD x BRL (Real)</h3>
+
+            <div class="dropdown">
+              <button type="button" class="btn-link dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-ellipsis-v"></i>
+              </button>
+
+              <ul class="dropdown-menu">
+                <li><a href="#">This Week</a></li>
+                <li><a href="#">Last Week</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel-chart">
+            <!-- Morris Line Chart 01 Start -->
+            <div id="morrisLineChartCotacaoUSD_BRL" class="chart--body line--chart style--1"></div>
+            <!-- Morris Line Chart 01 End -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+
+      </div>
     </div>
-</section>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    /* ------------------------------------------------------------------------- *
+     * CHARTS
+     * ------------------------------------------------------------------------- */
+    /* MORRIS LINE CHART Cotação CNY */
+    var $morrisLineChartCotacaoUSD_CNY = document.getElementById('morrisLineChartCotacaoUSD_CNY');
+
+    if ($morrisLineChartCotacaoUSD_CNY) {
+      new Morris.Line({
+        element: $morrisLineChartCotacaoUSD_CNY.id,
+        data: {{ cotacao_cny|safe }},
+        xkey: 'data',
+        ykeys: ['valor'],
+        ymax: 'auto',
+        ymin: 'auto',
+        labels: ['Valor'],
+        lineColors: ['#009378'],
+        postUnits: ' ¥',
+        parseTime: false,
+        pointSize: 0,
+        lineWidth: 2,
+        gridLineColor: '#eee',
+        resize: true,
+        hideHover: true,
+        yLabelFormat: function (y) {
+          return Math.round(y * 100) / 100
+        }
+      });
+    }
+
+    /* MORRIS LINE CHART Cotação BRL */
+    var $morrisLineChartCotacaoUSD_BRL = document.getElementById('morrisLineChartCotacaoUSD_BRL');
+
+    if ($morrisLineChartCotacaoUSD_BRL) {
+      new Morris.Line({
+        element: $morrisLineChartCotacaoUSD_BRL.id,
+        data: {{ cotacao_brl|safe }},
+        xkey: 'data',
+        ykeys: ['valor'],
+        ymax: 'auto',
+        ymin: 'auto',
+        labels: ['Valor'],
+        lineColors: ['#009378'],
+        postUnits: ' ₨',
+        parseTime: false,
+        pointSize: 0,
+        lineWidth: 2,
+        gridLineColor: '#eee',
+        resize: true,
+        hideHover: true,
+        yLabelFormat: function (y) {
+          return Math.round(y * 100) / 100
+        }
+      });
+    }
+  </script>
 {% endblock %}

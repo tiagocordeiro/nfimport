@@ -26,8 +26,8 @@ python manage.py migrate
 ## Como rodar os testes:
 
 ```
-pycodestyle nfi/ core/ notas/
-pyflakes nfi/ core/ notas/
+pycodestyle .
+flake8 .
 python manage.py test -v 2
 ```
 

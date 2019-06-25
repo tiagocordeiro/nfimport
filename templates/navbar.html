@@ -4,7 +4,7 @@
     <!-- Navbar Header Start -->
     <div class="navbar--header">
         <!-- Logo Start -->
-        <a href="{% url 'dashboard' %}" class="logo">
+        <a href="{% url 'dashboard' %}" class="logo" style="text-align: center;">
             <img src="{% static "assets/img/logo.png" %}" alt="">
         </a>
         <!-- Logo End -->
@@ -25,19 +25,6 @@
 
     <div class="navbar--nav ml-auto">
         <ul class="nav">
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fa fa-bell"></i>
-                    <span class="badge text-white bg-blue">7</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="mailbox_inbox.html" class="nav-link">
-                    <i class="fa fa-envelope"></i>
-                    <span class="badge text-white bg-blue">4</span>
-                </a>
-            </li>
 
             <!-- Nav User Start -->
             <li class="nav-item dropdown nav--user online">
@@ -53,10 +40,8 @@
 
                 <ul class="dropdown-menu">
                     <li><a href="{% url "profile_update" %}"><i class="far fa-user"></i>Profile</a></li>
-                    <li><a href="mailbox_inbox.html"><i class="far fa-envelope"></i>Inbox</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+                    <li><a href="{% url 'admin:index' %}"><i class="fa fa-cog"></i>Settings</a></li>
                     <li class="dropdown-divider"></li>
-                    <li><a href="lock-screen.html"><i class="fa fa-lock"></i>Lock Screen</a></li>
                     <li><a href="{% url 'logout' %}"><i class="fa fa-power-off"></i>Logout</a></li>
                 </ul>
             </li>
@@ -89,16 +74,6 @@
                 <li class="nav-item">
                     <a href="{% url "profile_update" %}" class="nav-link" title="User Profile">
                         <i class="fa fa-user"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="lock-screen.html" class="nav-link" title="Lock Screen">
-                        <i class="fa fa-lock"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="mailbox_inbox.html" class="nav-link" title="Messages">
-                        <i class="fa fa-envelope"></i>
                     </a>
                 </li>
                 <li class="nav-item">
