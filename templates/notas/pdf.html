@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido Importação</title>
+  <style type="text/css">
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+  </style>
+</head>
+<body>
+{{ nota.description }} - {{ nota.date }}
+
+{% for item in nota_itens %}
+  <p>{{ item.item }} - {{ item.item.maquina_ch|safe }}</p>
+{% endfor %}
+</body>
+</html>

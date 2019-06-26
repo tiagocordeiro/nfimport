@@ -1,15 +1,23 @@
 import csv
 import io
+import os
 import ssl
 from io import BytesIO
 from urllib.request import urlopen
 
 import xlsxwriter
 import xlwt
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.template.loader import get_template
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from xhtml2pdf import pisa
+from xhtml2pdf.default import DEFAULT_FONT
 
 from core.models import UserProfile
 from .forms import ProductForm, NotaForm, NotaItensForm
@@ -49,6 +57,7 @@ def product_create(request):
                                                     'form': form, })
 
 
+@login_required
 def product_update(request, pk):
     try:
         usuario = UserProfile.objects.get(user=request.user)
@@ -170,6 +179,7 @@ def nota_update(request, pk):
     return render(request, 'notas/edit.html', context)
 
 
+@login_required
 def nota_export_csv(request, pk):
     nota = get_object_or_404(Nota, pk=pk)
     nota_itens = nota.notaitens_set.all()
@@ -192,6 +202,7 @@ def nota_export_csv(request, pk):
     return response
 
 
+@login_required
 def nota_export_xls(request, pk):
     nota = get_object_or_404(Nota, pk=pk)
     nota_itens = nota.notaitens_set.all()
@@ -232,6 +243,7 @@ def nota_export_xls(request, pk):
     return response
 
 
+@login_required
 def nota_export_xlsx(request, pk):
     nota = get_object_or_404(Nota, pk=pk)
     nota_itens = nota.notaitens_set.all()
@@ -288,4 +300,61 @@ def nota_export_xlsx(request, pk):
     )
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
+    return response
+
+
+def link_callback(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    # use short variable names
+    s_url = settings.STATIC_URL  # Typically /static/
+    s_root = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+    m_url = settings.MEDIA_URL  # Typically /static/media/
+    m_root = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+    # convert URIs to absolute system paths
+    if uri.startswith(m_url):
+        path = os.path.join(m_root, uri.replace(m_url, ""))
+    elif uri.startswith(s_url):
+        path = os.path.join(s_root, uri.replace(s_url, ""))
+    else:
+        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+
+    # make sure that file exists
+    if not os.path.isfile(path):
+        raise Exception(
+            'media URI must start with %s or %s' % (s_url, m_url)
+        )
+    return path
+
+
+def nota_export_pdf(request, pk):
+    pdfmetrics.registerFont(
+        TTFont('yh', request.build_absolute_uri(staticfiles_storage.url('assets/minutafonts/msyh.ttf'))))
+    DEFAULT_FONT['helvetica'] = 'yh'
+
+    nota = get_object_or_404(Nota, pk=pk)
+    nota_itens = nota.notaitens_set.all()
+
+    ssl._create_default_https_context = ssl._create_unverified_context
+
+    template_path = 'notas/pdf.html'
+    context = {
+        'nota': nota,
+        'nota_itens': nota_itens,
+    }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf;charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response, encoding='utf8', link_callback=link_callback)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
