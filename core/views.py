@@ -1,4 +1,4 @@
-import os
+from decouple import config
 from datetime import date, timedelta
 
 import pandas as pd
@@ -30,7 +30,7 @@ def dashboard(request):
         for item in itens:
             notas_total += item.valor_usd * item.quantidade
 
-    quandl.ApiConfig.api_key = os.environ.get('QUANDL_KEY')
+    quandl.ApiConfig.api_key = config('QUANDL_KEY')
     hoje = date.today()
     periodo = hoje - timedelta(weeks=4)
     cotacao_moedas = quandl.get(["BUNDESBANK/BBEX3_D_CNY_USD_CA_AC_000",

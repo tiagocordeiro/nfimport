@@ -1,8 +1,11 @@
+import os
+
+import quandl
 from django.contrib.auth.models import AnonymousUser, User, Group
 from django.test import RequestFactory, TestCase
 
-from .views import dashboard, profile, profile_update
 from .forms import ProfileForm
+from .views import dashboard, profile, profile_update
 
 
 class CoreViewsTest(TestCase):
@@ -14,6 +17,7 @@ class CoreViewsTest(TestCase):
         self.group.user_set.add(self.user)
 
     def test_dashboard_anonimo(self):
+        quandl.ApiConfig.api_key = os.environ.get('QUANDL_KEY')
         request = self.factory.get('/')
         request.user = AnonymousUser()
 
