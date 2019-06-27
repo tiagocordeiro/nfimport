@@ -7,14 +7,52 @@
     @page {
       size: A4;
       margin: 1cm;
+      background-image: url("https://res.cloudinary.com/haxvh7tia/image/upload/v1561655028/pedidonfi/capa.png");
+      @frame content_frame {
+          left: 50pt; width: 512pt; top: 400pt; height: 632pt;
+      }
+    }
+    @page miolo {
+      size: A4;
+      margin: 1cm;
+      background-image: url("https://res.cloudinary.com/haxvh7tia/image/upload/v1561655028/pedidonfi/miolo.png");
+      @frame content_frame {
+        left: 10mm; width: 190mm; top: 75mm; height: 165mm;
+      }
     }
   </style>
 </head>
 <body>
-{{ nota.description }} - {{ nota.date }}
+
+<p style="font-size: 32px;">{{ nota.description }}</p>
+<p style="font-size: 16px;">{{ nota.date }}</p>
+
+
+<pdf:nexttemplate name="miolo"></pdf:nexttemplate>
+<pdf:nextpage></pdf:nextpage>
 
 {% for item in nota_itens %}
-  <p>{{ item.item }} - {{ item.item.maquina_ch|safe }}</p>
+
+  <table>
+    <tr>
+      <td width="290">
+        {% if item.item.imagem %}
+          <img src="{{ item.item.imagem.url }}" width="300px">
+        {% endif %}
+      </td>
+      <td width="290">
+        <p style="text-align: left; font-size: 18px;">{{ item.item }}</p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <p style="text-align: left; font-size: 18px;">{{ item.item.maquina_ch }}</p>
+      </td>
+    </tr>
+  </table>
+
+  <pdf:nextpage></pdf:nextpage>
+
 {% endfor %}
 </body>
 </html>
