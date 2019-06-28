@@ -7,15 +7,27 @@
     @page {
       size: A4;
       margin: 1cm;
-      background-image: url("https://res.cloudinary.com/haxvh7tia/image/upload/v1561655028/pedidonfi/capa.png");
+      {#background-image: url("https://res.cloudinary.com/haxvh7tia/image/upload/v1561655028/pedidonfi/capa_n.png");#}
+      @frame header_frame {
+        -pdf-frame-content: capa_header_content;
+        left: 50pt; width: 400px; top: 50pt; height: 200px;
+      }
       @frame content_frame {
           left: 50pt; width: 512pt; top: 400pt; height: 632pt;
+      }
+      @frame footer_frame {
+        -pdf-frame-content: capa_footer_content;
+        left: 450px; width: 250px; top: 950px; height: 100px;
       }
     }
     @page miolo {
       size: A4;
       margin: 1cm;
-      background-image: url("https://res.cloudinary.com/haxvh7tia/image/upload/v1561655028/pedidonfi/miolo.png");
+      {#background-image: url("https://res.cloudinary.com/haxvh7tia/image/upload/v1561655028/pedidonfi/miolo_n.png");#}
+      @frame header_frame {
+        -pdf-frame-content: miolo_header_content;
+        left: 50pt; width: 300px; top: 50pt; height: 200px;
+      }
       @frame content_frame {
         left: 10mm; width: 190mm; top: 75mm; height: 165mm;
       }
@@ -24,29 +36,45 @@
 </head>
 <body>
 
+<div id="capa_header_content">
+  <img src="https://res.cloudinary.com/haxvh7tia/image/upload/v1561745031/pedidonfi/logo.png" alt="Zumaq">
+</div>
+
 <p style="font-size: 32px;">{{ nota.description }}</p>
 <p style="font-size: 16px;">{{ nota.date }}</p>
 
+<div id="capa_footer_content">
+  <img src="https://res.cloudinary.com/haxvh7tia/image/upload/v1561745976/pedidonfi/logo_ruijie.png" alt="Ruijie">
+</div>
 
 <pdf:nexttemplate name="miolo"></pdf:nexttemplate>
 <pdf:nextpage></pdf:nextpage>
 
 {% for item in nota_itens %}
 
+  <div id="miolo_header_content">
+    <img src="https://res.cloudinary.com/haxvh7tia/image/upload/v1561745976/pedidonfi/ruijie-compra.png" alt="Ruijie Compra">
+  </div>
+
   <table>
     <tr>
-      <td width="290">
+      <td width="400">
         {% if item.item.imagem %}
-          <img src="{{ item.item.imagem.url }}" width="300px">
+          <img src="{{ item.item.imagem.url }}" width="400px">
         {% endif %}
       </td>
-      <td width="290">
+      <td>
+        <p style="text-align: left; font-size: 18px;">Código: {{ item.item.modelo_pt }}</p>
+        <p style="text-align: left; font-size: 18px;">BL: </p>
+        <p style="text-align: left; font-size: 18px;">Renminbi: </p>
+        <p style="text-align: left; font-size: 18px;">Quantidade: {{ item.quantidade }}</p>
+        <p style="text-align: left; font-size: 18px;">Preço Federal: </p>
         <p style="text-align: left; font-size: 18px;">{{ item.item }}</p>
       </td>
     </tr>
     <tr>
       <td colspan="2">
-        <p style="text-align: left; font-size: 18px;">{{ item.item.maquina_ch }}</p>
+        <p style="text-align: left; font-size: 18px;">Chinês: {{ item.item.maquina_ch }}</p>
       </td>
     </tr>
   </table>
