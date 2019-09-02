@@ -1,6 +1,12 @@
-from django.contrib.auth.models import AnonymousUser, User, Group
+import base64  # for decoding base64 image
+import tempfile  # for setting up tempdir for media
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+from django.contrib.auth.models import User, Group, AnonymousUser
+from django.contrib.messages.storage.fallback import FallbackStorage
 from django.forms.models import inlineformset_factory
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 
@@ -13,12 +19,27 @@ class NotasViewsTest(TestCase):
     def setUp(self):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
+        # self.client = Client()
         self.user = User.objects.create_user(username='jacob', email='jacob@…', password='top_secret')
         self.group = Group.objects.create(name='Testes')
         self.group.user_set.add(self.user)
 
         # Nota
         self.nota = Nota.objects.create(description='Nota Teste', date=timezone.now(), dolar_dia=3.33)
+
+        # Produto image
+        image_thumb = '''
+                        R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7
+                        '''.strip()
+
+        self.image = InMemoryUploadedFile(
+            BytesIO(base64.b64decode(image_thumb)),  # use io.BytesIO
+            field_name='tempfile',
+            name='tempfile.png',
+            content_type='image/png',
+            size=len(image_thumb),
+            charset='utf-8',
+        )
 
         # Produto
         self.product = Product.objects.create(maquina_pt='Maquina teste',
@@ -29,7 +50,8 @@ class NotasViewsTest(TestCase):
                                               cor_pt='Azul',
                                               faz_pt='Faz testes',
                                               voltagem_pt='110v',
-                                              ncm='111.222.333')
+                                              ncm='111.222.333',
+                                              imagem=str(self.image))
 
         # Nota Itens
         self.nota_itens = NotaItens.objects.create(item=self.product,
