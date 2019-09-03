@@ -1,12 +1,10 @@
 import base64  # for decoding base64 image
-import tempfile  # for setting up tempdir for media
 from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from django.contrib.auth.models import User, Group, AnonymousUser
-from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.forms.models import inlineformset_factory
-from django.test import RequestFactory, TestCase, Client
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
