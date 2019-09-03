@@ -1,8 +1,8 @@
-from decouple import config
 from datetime import date, timedelta
 
 import pandas as pd
 import quandl
+from decouple import config
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms.models import inlineformset_factory
@@ -28,7 +28,10 @@ def dashboard(request):
     for nota in notas:
         itens = NotaItens.objects.filter(nota=nota)
         for item in itens:
-            notas_total += item.valor_usd * item.quantidade
+            if item.valor_usd and item.quantidade:
+                notas_total += item.valor_usd * item.quantidade
+            else:
+                pass
 
     quandl.ApiConfig.api_key = config('QUANDL_KEY')
     hoje = date.today()
