@@ -20,9 +20,6 @@ script:
   - pycodestyle .
   - flake8 .
   - coverage run --source='.' manage.py test -v 2
-#  - python manage.py test -v 2
-#  - flake8 casaconceito/ parceiros/ pages/
-#  - py.test --cov=pytocli tests/
 #  - python -m doctest README.md
 after_success:
   - codecov
