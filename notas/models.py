@@ -32,7 +32,7 @@ class Product(TimeStampedModel, Active):
     nome_classificacao = models.TextField(blank=True, null=True)
     caixa_lateral_base = models.CharField(max_length=255, blank=True, null=True)
     opcionais = models.TextField(blank=True, null=True)
-    imagem = models.ImageField(upload_to='products/', blank=True, null=True)
+    imagem = models.URLField(blank=True, null=True, default='https://via.placeholder.com/150')
 
     class Meta:
         ordering = ('maquina_pt',)

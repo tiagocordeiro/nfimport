@@ -43,7 +43,7 @@ def product_create(request):
         usuario = None
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
+        form = ProductForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
             product.added_by = request.user
