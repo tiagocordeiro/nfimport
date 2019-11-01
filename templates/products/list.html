@@ -32,7 +32,7 @@
                         <td>
                             <a href="{% url 'product_update' pk=produto.pk %}" class="btn-link">
                                 {% if produto.imagem %}
-                                    <img src="{{ produto.imagem.url }}" alt="">
+                                    <img src="{{ produto.imagem }}" alt="">
                                 {% else %}
                                     <img src="{% static 'assets/img/avatars/01_150x150.png' %}" alt="" class="rounded-circle">
                                 {% endif %}
