@@ -60,7 +60,7 @@
     <tr>
       <td width="400">
         {% if item.item.imagem %}
-          <img src="{{ item.item.imagem }}" width="400px">
+          <img src="{{ item.item.imagem|iriencode }}" width="400px">
         {% endif %}
       </td>
       <td>
