@@ -26,7 +26,7 @@ whitenoise==4.1.4
 # Pandas
 numpy==1.17.3
 pandas==0.25.2
-python-dateutil==2.8.0
+python-dateutil==2.8.1
 
 
 # XLS
