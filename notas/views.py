@@ -204,6 +204,57 @@ def nota_export_csv(request, pk):
 
 
 @login_required
+def nota_export_commercial_invoice(request, pk):
+    nota = get_object_or_404(Nota, pk=pk)
+    nota_itens = nota.notaitens_set.all()
+
+    ssl._create_default_https_context = ssl._create_unverified_context
+    output = io.BytesIO()
+
+    wb = xlsxwriter.Workbook(output)
+    ws = wb.add_worksheet()
+
+    # Add a number format for cells with money.
+    money = wb.add_format({'num_format': '[$USD] #,##0.00'})
+    text_format = wb.add_format({'text_wrap': True})
+
+    # Sheet header, first row
+    row_num = 0
+
+    columns = ['CODE', 'DESCRIPTION', 'NCM', 'QUANTITY', 'UNIT PRICE', 'TOTAL VALUE']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num])
+
+    rows = nota_itens.values_list('item__modelo_pt', 'item__maquina_pt', 'item__ncm', 'quantidade', 'valor_usd',
+                                  'item__tipo_pt', 'item__area_trabalho_pt', 'item__eixo_z_pt', 'item__faz_pt')
+
+    for row in rows:
+        row_num += 1
+        ws.set_column(0, 0, 10)
+        ws.set_column(1, 1, 30)
+        ws.set_column(2, 2, 10)
+        ws.set_column(4, 5, 15)
+        ws.write(row_num, 0, row[0])
+        full_description = str(row[1] + ' ' + row[0] + ' ' + row[5] + ' ' + row[6] + ' ' + row[7] + ' ' + row[8])
+        ws.write(row_num, 1, full_description, text_format)
+        ws.write(row_num, 2, row[2])
+        ws.write(row_num, 3, row[3])
+        ws.write(row_num, 4, row[4], money)
+        ws.write_formula(row_num, 5, f'=SUM(D{row_num + 1} * E{row_num + 1})', money)
+
+    wb.close()
+
+    # Rewind the buffer.
+    output.seek(0)
+
+    response = HttpResponse(output, content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="Commercial-Invoice.xlsx"'
+
+    return response
+
+
+@login_required
 def nota_export_xls(request, pk):
     nota = get_object_or_404(Nota, pk=pk)
     nota_itens = nota.notaitens_set.all()
