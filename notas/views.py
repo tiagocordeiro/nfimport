@@ -2,6 +2,7 @@ import csv
 import io
 import os
 import ssl
+import urllib
 from io import BytesIO
 from urllib.request import urlopen
 
@@ -271,7 +272,7 @@ def nota_export_xlsx(request, pk):
 
     for row in rows:
         try:
-            imagem = nota.notaitens_set.all()[row_num].item.imagem.url
+            imagem = urllib.parse.quote(nota.notaitens_set.all()[row_num].item.imagem, safe='/:')
         except ValueError:
             imagem = ''
 

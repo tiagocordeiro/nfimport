@@ -7,7 +7,8 @@ from django.utils import timezone
 
 from .forms import ProductForm, NotaItensForm, NotaForm
 from .models import Nota, Product, NotaItens
-from .views import product_list, product_create, nota_list, nota_create, nota_update, product_update
+from .views import product_list, product_create, nota_list, nota_create, nota_update, product_update, nota_export_csv, \
+    nota_export_xls, nota_export_xlsx, nota_export_pdf
 
 
 class NotasViewsTest(TestCase):
@@ -265,3 +266,35 @@ class NotasViewsTest(TestCase):
         nota.refresh_from_db()
         self.assertEqual(nota.description, 'Teste Editado')
         self.assertTrue(nota.notaitens_set.values().last()['valor_usd'], 2000)
+
+    def test_nota_export_csv_statuscode(self):
+        nota = self.nota
+        request = self.factory.get('/nota/export/csv/' + str(nota.pk))
+        request.user = self.user
+
+        response = nota_export_csv(request, pk=nota.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_nota_export_xls_statuscode(self):
+        nota = self.nota
+        request = self.factory.get('/nota/export/xls/' + str(nota.pk))
+        request.user = self.user
+
+        response = nota_export_xls(request, pk=nota.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_nota_export_xlsx_statuscode(self):
+        nota = self.nota
+        request = self.factory.get('/nota/export/xlsx/' + str(nota.pk))
+        request.user = self.user
+
+        response = nota_export_xlsx(request, pk=nota.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_nota_export_pdf_statuscode(self):
+        nota = self.nota
+        request = self.factory.get('/nota/export/pdf/' + str(nota.pk))
+        request.user = self.user
+
+        response = nota_export_pdf(request, pk=nota.pk)
+        self.assertEqual(response.status_code, 200)
