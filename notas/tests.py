@@ -7,8 +7,8 @@ from django.utils import timezone
 
 from .forms import ProductForm, NotaItensForm, NotaForm
 from .models import Nota, Product, NotaItens
-from .views import product_list, product_create, nota_list, nota_create, nota_update, product_update, nota_export_csv, \
-    nota_export_xls, nota_export_xlsx, nota_export_pdf
+from .views import product_list, product_create, nota_list, nota_create, nota_update, product_update, \
+    nota_export_csv, nota_export_xls, nota_export_xlsx, nota_export_pdf
 
 
 class NotasViewsTest(TestCase):
