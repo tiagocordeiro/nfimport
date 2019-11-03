@@ -13,4 +13,5 @@ urlpatterns = [
     path('nota/export/xls/<pk>/', views.nota_export_xls, name='nota_export_xls'),
     path('nota/export/xlsx/<pk>/', views.nota_export_xlsx, name='nota_export_xlsx'),
     path('nota/export/pdf/<pk>/', views.nota_export_pdf, name='nota_export_pdf'),
+    path('nota/export/ci/<pk>/', views.nota_export_commercial_invoice, name='nota_export_ci'),
 ]
