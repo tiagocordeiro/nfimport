@@ -35,6 +35,14 @@ class ProductForm(ModelForm):
                   'caixa_lateral_base',
                   'opcionais',
                   'imagem',
+                  'codigo_sku',
+                  'preco_custo',
+                  'preco_federal',
+                  'peso_liquido',
+                  'peso_bruto',
+                  'largura',
+                  'altura',
+                  'profundidade',
                   ]
         widgets = {
             'maquina_pt': TextInput(attrs={'class': 'form-control', 'placeholder': 'Máquina'}),
@@ -66,6 +74,14 @@ class ProductForm(ModelForm):
             'caixa_lateral_base': TextInput(attrs={'class': 'form-control', 'placeholder': 'Caixa Lateral Base'}),
             'opcionais': Textarea(attrs={'class': 'form-control', 'placeholder': 'Opcionais'}),
             'imagem': TextInput(attrs={'class': 'form-control', 'placeholder': 'URL da Imagem'}),
+            'codigo_sku': TextInput(attrs={'class': 'form-control', 'placeholder': 'Código Bling'}),
+            'preco_custo': NumberInput(attrs={'class': 'form-control'}),
+            'preco_federal': NumberInput(attrs={'class': 'form-control'}),
+            'peso_liquido': NumberInput(attrs={'class': 'form-control'}),
+            'peso_bruto': NumberInput(attrs={'class': 'form-control'}),
+            'largura': NumberInput(attrs={'class': 'form-control'}),
+            'altura': NumberInput(attrs={'class': 'form-control'}),
+            'profundidade': NumberInput(attrs={'class': 'form-control'}),
         }
 
 
