@@ -33,11 +33,55 @@ class Product(TimeStampedModel, Active):
     caixa_lateral_base = models.CharField(max_length=255, blank=True, null=True)
     opcionais = models.TextField(blank=True, null=True)
     imagem = models.URLField(blank=True, null=True, default='https://via.placeholder.com/150')
+    codigo_sku = models.CharField('Código do produto no Bling',
+                                  max_length=60,
+                                  unique=True,
+                                  blank=True,
+                                  null=True)
+    preco_custo = models.DecimalField('Preço de custo em ¥',
+                                      max_digits=16,
+                                      decimal_places=10,
+                                      default=0.0,
+                                      blank=True,
+                                      null=True)
+    preco_federal = models.DecimalField('Preço federal',
+                                        max_digits=16,
+                                        decimal_places=10,
+                                        default=0.0,
+                                        blank=True,
+                                        null=True)
+    peso_liquido = models.DecimalField('Peso Líquido em Kg',
+                                       max_digits=10,
+                                       decimal_places=3,
+                                       default=0,
+                                       blank=True,
+                                       null=True)
+    peso_bruto = models.DecimalField('Peso Bruto em Kg',
+                                     max_digits=10,
+                                     decimal_places=3,
+                                     default=0,
+                                     blank=True,
+                                     null=True)
+    largura = models.PositiveIntegerField('Largura em cm',
+                                          default=0,
+                                          blank=True,
+                                          null=True)
+    altura = models.PositiveIntegerField('Altura em cm',
+                                         default=0,
+                                         blank=True,
+                                         null=True)
+    profundidade = models.PositiveIntegerField('Profundidade em cm',
+                                               default=0,
+                                               blank=True,
+                                               null=True)
 
     class Meta:
-        ordering = ('maquina_pt',)
+        ordering = ('maquina_pt', 'tipo_pt', 'modelo_pt')
         verbose_name = 'máquina'
         verbose_name_plural = 'máquinas'
+
+    def cubagem(self):
+        return int(self.largura) / 100 * int(self.altura) / 100 * int(self.profundidade) / 100
 
     def __str__(self):
         return str(self.maquina_pt + ' - ' + self.tipo_pt + ' - ' + self.modelo_pt)
