@@ -15,13 +15,14 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.template.loader import get_template
+from pybling.products import get_product
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from xhtml2pdf import pisa
 from xhtml2pdf.default import DEFAULT_FONT
 
 from core.models import UserProfile
-from .forms import ProductForm, NotaForm, NotaItensForm
+from .forms import ProductForm, NotaForm, NotaItensForm, BlingProductForm
 from .models import Product, Nota, NotaItens
 
 
@@ -74,7 +75,7 @@ def product_update(request, pk):
             if form.is_valid():
                 form.save()
                 messages.success(request, "O produto foi atualizado")
-                return redirect(product_list)
+                return redirect(product_update, pk=pk)
 
         except Exception as e:
             messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
@@ -82,13 +83,79 @@ def product_update(request, pk):
     else:
         form = ProductForm(instance=product)
 
-    contex = {
+    context = {
         'form': form,
         'usuario': usuario,
         'product': product,
     }
 
-    return render(request, 'products/edit.html', contex)
+    return render(request, 'products/edit.html', context)
+
+
+@login_required
+def product_update_from_bling(request, pk):
+    try:
+        usuario = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        usuario = None
+
+    product = get_object_or_404(Product, pk=pk)
+
+    try:
+        product_bling = get_product(codigo=product.codigo_sku)
+        detalhes = product_bling.json()['retorno']['produtos'][0]['produto']
+
+        imagens = detalhes['imagem']
+        if imagens:
+            imagem = imagens[0]['link']
+        else:
+            imagem = None
+
+        context = {
+            'product': product,
+            'codigo_sku': detalhes['codigo'],
+            'preco_custo': detalhes['precoCusto'],
+            'preco_federal': detalhes['preco'],
+            'peso_liquido': detalhes['pesoLiq'],
+            'peso_bruto': detalhes['pesoBruto'],
+            'largura': detalhes['larguraProduto'],
+            'altura': detalhes['alturaProduto'],
+            'profundidade': detalhes['profundidadeProduto'],
+            'imagem': imagem
+        }
+    except KeyError:
+        messages.warning(request, 'Verifique o código do Bling')
+        return redirect(product_update, pk=pk)
+
+    if request.method == 'GET':
+        form = BlingProductForm(request.POST, instance=product)
+
+        try:
+            if form.is_valid():
+                bling_data = form.save(commit=False)
+                bling_data.codigo_sku = detalhes['codigo']
+                bling_data.preco_custo = detalhes['precoCusto']
+                bling_data.preco_federal = detalhes['preco']
+                bling_data.peso_liquido = detalhes['pesoLiq']
+                bling_data.peso_bruto = detalhes['pesoBruto']
+                bling_data.largura = detalhes['larguraProduto']
+                bling_data.altura = detalhes['alturaProduto']
+                bling_data.profundidade = detalhes['profundidadeProduto']
+                if imagem:
+                    bling_data.imagem = imagem
+                bling_data.save()
+                messages.success(request, "O produto foi atualizado")
+                return redirect(product_update, pk=pk)
+
+        except Exception as e:
+            messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
+
+    else:
+        form = BlingProductForm(instance=product)
+
+    return render(request, 'products/edit.html', {'form': form,
+                                                  'usuario': usuario,
+                                                  'context': context})
 
 
 @login_required

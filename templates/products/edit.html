@@ -23,21 +23,31 @@
         <!-- Records Header End -->
     </div>
 
+    {% if form.errors %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ form.errors }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endif %}
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
     <div class="panel">
         <!-- Edit Product Start -->
         <div class="records--body">
             <div class="title">
                 <h6 class="h6">Detalhes</h6>
-
-                {% if form.errors %}
-                  {{ form.errors }}
-                {% endif %}
-
-                {% if messages %}
-                  {% for message in messages %}
-                    <div class="card-panel amber lighten-4">{{ message }}</div>
-                  {% endfor %}
-                {% endif %}
 
                 <a href="#" class="btn btn-rounded btn-danger">Cancelar</a>
             </div>
@@ -315,7 +325,7 @@
                             {{ form.codigo_sku }}
                         </div>
                         <div class="col-md-3">
-                            <a style="float: right;" href="#" class="btn btn-rounded btn-info">Preencher dados</a>
+                            <a style="float: right;" href="{% url 'bling_update' pk=product.pk %}" class="btn btn-rounded btn-info">Preencher dados</a>
                         </div>
                     </div>
 

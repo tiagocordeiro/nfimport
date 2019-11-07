@@ -54,3 +54,6 @@ xhtml2pdf==0.2.3
 
 # Sentry
 sentry-sdk==0.13.1
+
+# Bling
+pybling==0.0.9
