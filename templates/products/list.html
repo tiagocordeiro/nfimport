@@ -20,6 +20,7 @@
                 <thead>
                     <tr>
                         <th>Imagem</th>
+                        <th>Código</th>
                         <th>Máquina</th>
                         <th>Tipo</th>
                         <th>Modelo</th>
@@ -37,6 +38,11 @@
                                     <img src="{% static 'assets/img/avatars/01_150x150.png' %}" alt="" class="rounded-circle">
                                 {% endif %}
                             </a>
+                        </td>
+                        <td>
+                            {% if produto.codigo_sku %}
+                                <a href="{% url 'product_update' pk=produto.pk %}" class="btn-link">{{ produto.codigo_sku }}</a>
+                            {% endif %}
                         </td>
                         <td>
                             <a href="{% url 'product_update' pk=produto.pk %}" class="btn-link">{{ produto.maquina_pt }}</a>

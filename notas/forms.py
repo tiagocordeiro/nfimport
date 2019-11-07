@@ -107,3 +107,29 @@ class NotaItensForm(ModelForm):
             'quantidade': NumberInput(attrs={'class': 'form-control'}),
             'valor_usd': NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+class BlingProductForm(ProductForm):
+    class Meta:
+        model = Product
+        fields = ['imagem',
+                  'codigo_sku',
+                  'preco_custo',
+                  'preco_federal',
+                  'peso_liquido',
+                  'peso_bruto',
+                  'largura',
+                  'altura',
+                  'profundidade']
+
+        widgets = {
+            'imagem': TextInput(attrs={'class': 'form-control', 'placeholder': 'URL da Imagem'}),
+            'codigo_sku': TextInput(attrs={'class': 'form-control', 'placeholder': 'Código Bling'}),
+            'preco_custo': NumberInput(attrs={'class': 'form-control'}),
+            'preco_federal': NumberInput(attrs={'class': 'form-control'}),
+            'peso_liquido': NumberInput(attrs={'class': 'form-control'}),
+            'peso_bruto': NumberInput(attrs={'class': 'form-control'}),
+            'largura': NumberInput(attrs={'class': 'form-control'}),
+            'altura': NumberInput(attrs={'class': 'form-control'}),
+            'profundidade': NumberInput(attrs={'class': 'form-control'}),
+        }

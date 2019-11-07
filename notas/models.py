@@ -62,18 +62,24 @@ class Product(TimeStampedModel, Active):
                                      default=0,
                                      blank=True,
                                      null=True)
-    largura = models.PositiveIntegerField('Largura em cm',
-                                          default=0,
-                                          blank=True,
-                                          null=True)
-    altura = models.PositiveIntegerField('Altura em cm',
-                                         default=0,
-                                         blank=True,
-                                         null=True)
-    profundidade = models.PositiveIntegerField('Profundidade em cm',
-                                               default=0,
-                                               blank=True,
-                                               null=True)
+    largura = models.DecimalField('Largura em cm',
+                                  max_digits=10,
+                                  decimal_places=2,
+                                  default=0,
+                                  blank=True,
+                                  null=True)
+    altura = models.DecimalField('Altura em cm',
+                                 max_digits=10,
+                                 decimal_places=2,
+                                 default=0,
+                                 blank=True,
+                                 null=True)
+    profundidade = models.DecimalField('Profundidade em cm',
+                                       max_digits=10,
+                                       decimal_places=2,
+                                       default=0,
+                                       blank=True,
+                                       null=True)
 
     class Meta:
         ordering = ('maquina_pt', 'tipo_pt', 'modelo_pt')
