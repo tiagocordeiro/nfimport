@@ -65,10 +65,11 @@
       </td>
       <td>
         <p style="text-align: left; font-size: 18px;">Código: {{ item.item.modelo_pt }}</p>
-        <p style="text-align: left; font-size: 18px;">BL: </p>
-        <p style="text-align: left; font-size: 18px;">Renminbi: </p>
+        <p style="text-align: left; font-size: 18px;">Renminbi ¥: {{ item.item.preco_custo|floatformat:2 }}</p>
+        <p style="text-align: left; font-size: 18px;">Preço Federal ₨: {{ item.item.preco_federal|floatformat:2 }}</p>
         <p style="text-align: left; font-size: 18px;">Quantidade: {{ item.quantidade }}</p>
-        <p style="text-align: left; font-size: 18px;">Preço Federal: </p>
+        <p style="text-align: left; font-size: 18px;">Peso Bruto Kg: {{ item.item.peso_bruto|floatformat:2 }}</p>
+        <p style="text-align: left; font-size: 18px;">Cubagem: {{ item.item.cubagem|floatformat:2 }}</p>
         <p style="text-align: left; font-size: 18px;">{{ item.item }}</p>
       </td>
     </tr>
@@ -82,5 +83,21 @@
   <pdf:nextpage></pdf:nextpage>
 
 {% endfor %}
+
+  <div id="miolo_header_content">
+    <img src="https://res.cloudinary.com/haxvh7tia/image/upload/v1561745976/pedidonfi/ruijie-compra.png" alt="Ruijie Compra">
+  </div>
+
+  <table>
+    <tr>
+      <td>
+        <p style="text-align: left; font-size: 18px;">Total preço de Custo ¥: {{ nota_total_custo|floatformat:2 }}</p>
+        <p style="text-align: left; font-size: 18px;">Preço preço Federal ₨: {{ nota_total_federal|floatformat:2 }}</p>
+        <p style="text-align: left; font-size: 18px;">Cubagem Total: {{ nota_total_cubagem|floatformat:2 }}</p>
+        <p style="text-align: left; font-size: 18px;">Peso Bruto Total: {{ nota_total_peso_bruto|floatformat:2 }}</p>
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>
