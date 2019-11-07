@@ -87,7 +87,7 @@ class Product(TimeStampedModel, Active):
         verbose_name_plural = 'máquinas'
 
     def cubagem(self):
-        return int(self.largura) / 100 * int(self.altura) / 100 * int(self.profundidade) / 100
+        return float(self.largura) / 100 * float(self.altura) / 100 * float(self.profundidade) / 100
 
     def __str__(self):
         return str(self.maquina_pt + ' - ' + self.tipo_pt + ' - ' + self.modelo_pt)
