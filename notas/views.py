@@ -456,6 +456,23 @@ def nota_export_pdf(request, pk):
 
     nota = get_object_or_404(Nota, pk=pk)
     nota_itens = nota.notaitens_set.all()
+    nota_total_custo = 0
+    nota_total_federal = 0
+    nota_total_cubagem = 0
+    nota_total_peso_bruto = 0
+
+    for item in nota_itens:
+        nota_subtotal_custo = item.quantidade * item.item.preco_custo
+        nota_total_custo = nota_total_custo + nota_subtotal_custo
+
+        nota_subtotal_federal = item.quantidade * item.item.preco_federal
+        nota_total_federal = nota_total_federal + nota_subtotal_federal
+
+        nota_subtotal_cubagem = item.quantidade * item.item.cubagem()
+        nota_total_cubagem = nota_total_cubagem + nota_subtotal_cubagem
+
+        nota_subtotal_peso_bruto = item.quantidade * item.item.peso_bruto
+        nota_total_peso_bruto = nota_total_peso_bruto + nota_subtotal_peso_bruto
 
     ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -463,6 +480,10 @@ def nota_export_pdf(request, pk):
     context = {
         'nota': nota,
         'nota_itens': nota_itens,
+        'nota_total_custo': nota_total_custo,
+        'nota_total_federal': nota_total_federal,
+        'nota_total_cubagem': nota_total_cubagem,
+        'nota_total_peso_bruto': nota_total_peso_bruto
     }
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf;charset=utf-8')
