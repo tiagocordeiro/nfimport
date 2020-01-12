@@ -38,7 +38,7 @@ asn1crypto==1.2.0
 cffi==1.13.2
 cryptography==2.8
 inflection==0.3.1
-more-itertools==7.2.0
+more-itertools==8.1.0
 ndg-httpsclient==0.5.1
 pyOpenSSL==19.0.0
 pyasn1==0.4.7
