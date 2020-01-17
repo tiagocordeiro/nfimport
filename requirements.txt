@@ -43,7 +43,7 @@ ndg-httpsclient==0.5.1
 pyOpenSSL==19.0.0
 pyasn1==0.4.7
 pycparser==2.19
-quandl==3.4.8
+quandl==3.5.0
 
 # PDF
 html5lib==1.0.1
