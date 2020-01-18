@@ -50,7 +50,7 @@ html5lib==1.0.1
 pyPdf2==1.26.0
 reportlab==3.5.34
 webencodings==0.5.1
-xhtml2pdf==0.2.3
+xhtml2pdf==0.2.4
 
 # Sentry
 sentry-sdk==0.14.0
