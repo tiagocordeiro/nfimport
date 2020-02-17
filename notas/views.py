@@ -11,7 +11,6 @@ import xlwt
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.template.loader import get_template
@@ -450,8 +449,8 @@ def link_callback(uri, rel):
 
 
 def nota_export_pdf(request, pk):
-    pdfmetrics.registerFont(
-        TTFont('yh', request.build_absolute_uri(staticfiles_storage.url('assets/minutafonts/msyh.ttf'))))
+    pdfmetrics.registerFont(TTFont('yh', os.path.abspath(settings.BASE_DIR + '/templates/fonts/msyh.ttf')))
+
     DEFAULT_FONT['helvetica'] = 'yh'
 
     nota = get_object_or_404(Nota, pk=pk)

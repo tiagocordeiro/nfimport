@@ -42,9 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.humanize',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
-    'cloudinary',
     'crispy_forms',
     'bootstrapform',
 
@@ -165,14 +163,20 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='')
 
 # Cloudinary
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config('CLOUDINARY_NAME'),
-    'API_KEY': config('CLOUDINARY_API_KEY'),
-    'API_SECRET': config('CLOUDINARY_API_SECRET')
-}
+CLOUDINARY_URL = config('CLOUDINARY_URL', default=False)
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+if CLOUDINARY_URL:  # pragma: no cover
+    INSTALLED_APPS.remove('django.contrib.staticfiles')
+    INSTALLED_APPS = [
+        'cloudinary_storage',
+        'django.contrib.staticfiles',
+        'cloudinary',
+    ] + INSTALLED_APPS
+
+    COLLECTFAST_ENABLED = False
+
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+    STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 # Sentry
 sentry_sdk.init(dsn=config('SENTRY_DSN'), integrations=[DjangoIntegration()])

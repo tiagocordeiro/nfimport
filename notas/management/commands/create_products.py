@@ -5,7 +5,7 @@ from utils.products_populate import create_products
 
 
 class Command(BaseCommand):
-    help = '''Pupula banco com produtos do utils/csv_data/products.csv'''
+    help = '''Popula banco com produtos do utils/csv_data/products.csv'''
 
     def handle(self, *args, **options):
         produtos = create_products()
