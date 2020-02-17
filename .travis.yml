@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.7-dev"
+  - "3.8-dev"
 services:
   postgresql
 env:
@@ -15,11 +15,11 @@ install:
 before_script:
   - psql -c "CREATE DATABASE travis_ci_db;" -U postgres
   - python manage.py migrate --noinput
+  - python manage.py collectstatic --noinput
 # command to run tests
 script:
   - pycodestyle .
   - flake8 .
   - coverage run --source='.' manage.py test -v 2
-#  - python -m doctest README.md
 after_success:
   - codecov
