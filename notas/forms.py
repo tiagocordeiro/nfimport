@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput, SelectDateWidget
+from django.forms import ModelForm, TextInput, Textarea, Select, NumberInput, SelectDateWidget, CheckboxInput
 
 from .models import Product, Nota, NotaItens
 
@@ -103,9 +103,10 @@ class NotaItensForm(ModelForm):
         fields = ['item', 'quantidade', 'valor_usd']
 
         widgets = {
-            'item': Select(attrs={'class': 'form-control'}),
+            'item': Select(attrs={'class': 'form-control select-find'}),
             'quantidade': NumberInput(attrs={'class': 'form-control'}),
             'valor_usd': NumberInput(attrs={'class': 'form-control'}),
+            'DELETE': CheckboxInput(attrs={'class': 'form-check-input'})
         }
 
 
