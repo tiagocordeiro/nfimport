@@ -10,6 +10,7 @@ urlpatterns = [
     path('notas/', views.nota_list, name='nota_list'),
     path('nota/add/', views.nota_create, name='nota_create'),
     path('nota/edit/<pk>/', views.nota_update, name='nota_update'),
+    path('nota/copy/<pk>/', views.nota_copy, name='nota_copy'),
     path('nota/export/csv/<pk>/', views.nota_export_csv, name='nota_export_csv'),
     path('nota/export/xls/<pk>/', views.nota_export_xls, name='nota_export_xls'),
     path('nota/export/xlsx/<pk>/', views.nota_export_xlsx, name='nota_export_xlsx'),

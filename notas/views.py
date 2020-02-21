@@ -21,6 +21,7 @@ from xhtml2pdf import pisa
 from xhtml2pdf.default import DEFAULT_FONT
 
 from core.models import UserProfile
+from .facade import copy_nfi
 from .forms import ProductForm, NotaForm, NotaItensForm, BlingProductForm
 from .models import Product, Nota, NotaItens
 
@@ -497,3 +498,10 @@ def nota_export_pdf(request, pk):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+def nota_copy(request, pk):
+    new_nf = copy_nfi(pk)
+
+    messages.success(request, f"Nota copiada com sucesso")
+    return redirect(nota_update, pk=new_nf.pk)

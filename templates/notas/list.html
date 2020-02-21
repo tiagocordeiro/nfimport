@@ -10,53 +10,70 @@
 {% endblock %}
 
 {% block content %}
-<!-- Main Content Start -->
-<section class="main--content">
+    <!-- Main Content Start -->
+    <section class="main--content">
 
-    <div class="panel">
-        <!-- Records List Start -->
-        <div class="records--list" data-title="Listando Notas">
-            <table id="recordsListView" style="padding: 0px;">
-                <thead>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message|safe }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="panel">
+            <!-- Records List Start -->
+            <div class="records--list" data-title="Listando Notas">
+                <table id="recordsListView" style="padding: 0px;">
+                    <thead>
                     <tr>
                         <th>Descrição</th>
                         <th>Data</th>
                         <th>Dolar do Dia</th>
-                        <th class="not-sortable"> </th>
+                        <th class="not-sortable"></th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for nota in notas %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'nota_update' pk=nota.pk %}" class="btn-link">
-                                {{ nota.description }}
-                            </a>
-                        </td>
-                        <td>
-                            {{ nota.date }}
-                        </td>
-                        <td>{{ nota.dolar_dia }}</td>
-                        <td>
-                            <div class="dropleft">
-                                <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
+                        <tr>
+                            <td>
+                                <a href="{% url 'nota_update' pk=nota.pk %}" class="btn-link">
+                                    {{ nota.description }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ nota.date }}
+                            </td>
+                            <td>{{ nota.dolar_dia }}</td>
+                            <td>
+                                <div class="dropleft">
+                                    <a href="#" class="btn-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
 
-                                <div class="dropdown-menu">
-                                    <a href="{% url 'nota_update' pk=nota.pk %}" class="dropdown-item">Editar</a>
-                                    <a href="{% url 'nota_export_csv' pk=nota.pk %}" class="dropdown-item">CSV</a>
-                                    <a href="{% url 'nota_export_xlsx' pk=nota.pk %}" class="dropdown-item">XLS</a>
-                                    <a href="{% url 'nota_export_pdf' pk=nota.pk %}" class="dropdown-item">PDF</a>
-                                    <a href="{% url 'nota_export_ci' pk=nota.pk %}" class="dropdown-item">CI itens</a>
+                                    <div class="dropdown-menu">
+                                        <a href="{% url 'nota_update' pk=nota.pk %}" class="dropdown-item">Editar</a>
+                                        <a href="{% url 'nota_export_csv' pk=nota.pk %}" class="dropdown-item">CSV</a>
+                                        <a href="{% url 'nota_export_xlsx' pk=nota.pk %}" class="dropdown-item">XLS</a>
+                                        <a href="{% url 'nota_export_pdf' pk=nota.pk %}" class="dropdown-item">PDF</a>
+                                        <a href="{% url 'nota_export_ci' pk=nota.pk %}" class="dropdown-item">CI
+                                            itens</a>
+                                        <a href="{% url 'nota_copy' pk=nota.pk %}" class="dropdown-item">Copiar</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Records List End -->
         </div>
-        <!-- Records List End -->
-    </div>
-</section>
-<!-- Main Content End -->
+    </section>
+    <!-- Main Content End -->
 {% endblock %}
