@@ -49,24 +49,52 @@
             </div>
         </div>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message|safe }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if forms.errors %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ forms.errors }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if formset.errors %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ formset.errors }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="panel">
             <!-- Edit Product Start -->
             <div class="records--body">
                 <div class="title">
                     <h6 class="h6">Detalhes</h6>
-                    {% if forms.errors %}
-                        {{ forms.errors }}
-                    {% endif %}
-
-                    {% if formset.errors %}
-                        {{ formset.errors }}
-                    {% endif %}
-
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="card-panel amber lighten-4">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
                 </div>
 
                 <form action="{% url 'nota_update' pk=nota.pk %}" method="POST">
