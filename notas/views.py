@@ -505,3 +505,28 @@ def nota_copy(request, pk):
 
     messages.success(request, f"Nota copiada com sucesso")
     return redirect(nota_update, pk=new_nf.pk)
+
+
+@login_required
+def products_report_csv(request):
+    products = Product.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="relatorio-produtos.csv"'
+
+    colunas = []
+    for key in products.values().first().keys():
+        colunas.append(key)
+
+    writer = csv.writer(response)
+    writer.writerow(colunas)
+
+    for product in products.values():
+        colunas = []
+
+        for value in product.values():
+            colunas.append(value)
+
+        writer.writerow(colunas)
+
+    return response

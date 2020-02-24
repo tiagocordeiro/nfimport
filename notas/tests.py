@@ -7,8 +7,10 @@ from django.utils import timezone
 
 from .forms import ProductForm, NotaItensForm, NotaForm
 from .models import Nota, Product, NotaItens
-from .views import product_list, product_create, nota_list, nota_create, nota_update, product_update, \
-    nota_export_csv, nota_export_xls, nota_export_xlsx, nota_export_pdf
+from .views import product_list, product_create, nota_list, nota_create, \
+    nota_update, product_update, \
+    nota_export_csv, nota_export_xls, nota_export_xlsx, nota_export_pdf, \
+    products_report_csv
 
 
 class NotasViewsTest(TestCase):
@@ -297,4 +299,11 @@ class NotasViewsTest(TestCase):
         request.user = self.user
 
         response = nota_export_pdf(request, pk=nota.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_products_report_statuscode(self):
+        request = self.factory.get(reverse('products_report_csv'))
+        request.user = self.user
+
+        response = products_report_csv(request)
         self.assertEqual(response.status_code, 200)
