@@ -89,8 +89,26 @@ class Product(TimeStampedModel, Active):
     def cubagem(self):
         return float(self.largura) / 100 * float(self.altura) / 100 * float(self.profundidade) / 100
 
+    def build_product_name_str(self):
+        fields_to_return = [self.codigo_sku, self.maquina_pt,
+                            self.tipo_pt, self.modelo_pt]
+
+        str_to_return = ''
+        fields_total_len = len(fields_to_return)
+        field_item_position = 1
+
+        for field in fields_to_return:
+            if field:
+                if field_item_position == fields_total_len:
+                    str_to_return += field
+                else:
+                    str_to_return += field + ' - '
+            field_item_position += 1
+
+        return str_to_return
+
     def __str__(self):
-        return str(self.maquina_pt + ' - ' + self.tipo_pt + ' - ' + self.modelo_pt)
+        return self.build_product_name_str()
 
 
 class Nota(TimeStampedModel, Active):
