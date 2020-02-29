@@ -5,7 +5,18 @@ from django.contrib.auth.models import AnonymousUser, User, Group
 from django.test import RequestFactory, TestCase
 
 from .forms import ProfileForm
+from .templatetags.core_extras import get_original_image
 from .views import dashboard, profile, profile_update
+
+
+class TemplatetagsTest(TestCase):
+    def setUp(self) -> None:
+        self.image_url = 'https://cnczumaq.com/image/cache/catalog/PEC_Estoque/BOT-001-100x100.jpg'
+
+    def test_get_original_image(self):
+        original_image = get_original_image(self.image_url)
+
+        self.assertEqual(original_image, 'https://cnczumaq.com/image/catalog/PEC_Estoque/BOT-001.jpg')
 
 
 class CoreViewsTest(TestCase):

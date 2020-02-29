@@ -61,7 +61,7 @@
     <tr>
       <td width="400">
         {% if item.item.imagem %}
-          <img src="{{ item.item.imagem|img_100to500|iriencode }}" width="400px">
+          <img src="{{ item.item.imagem|original_image|iriencode }}" width="400px">
         {% endif %}
       </td>
       <td>
