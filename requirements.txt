@@ -4,7 +4,7 @@ cloudinary==1.20.0
 dj-database-url==0.5.0
 Django==3.0.3
 django-bootstrap-form==3.4
--e git://github.com/tiagocordeiro/django-cloudinary-storage.git@Django3Support#egg=django-cloudinary-storage
+-e git://github.com/tiagocordeiro/django-cloudinary-storage.git@addDjango3Support#egg=django-cloudinary-storage
 django-crispy-forms==1.9.0
 django-heroku==0.3.1
 gunicorn==20.0.4
