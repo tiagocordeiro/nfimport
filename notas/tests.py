@@ -87,12 +87,15 @@ class NotasViewsTest(TestCase):
         form = ProductForm(data=form_data)
         self.assertEqual(form.is_valid(), True)
 
-    def test_product_create_form_invalid(self):
+    def test_product_create_form_invalid_must_be_true(self):
+        """
+        Esses dados não precisam mais ser obrigatórios
+        """
         form_data = {'maquina_pt': '',
                      'tipo_pt': 'tipo teste'}
 
         form = ProductForm(data=form_data)
-        self.assertEqual(form.is_valid(), False)
+        self.assertEqual(form.is_valid(), True)
 
     def test_product_view_create(self):
         produtos = Product.objects.all()
@@ -141,7 +144,10 @@ class NotasViewsTest(TestCase):
         self.assertEqual(product.area_trabalho_pt, '77x77')
         self.assertEqual(product.cor_pt, 'Verde')
 
-    def test_product_view_update_invalid(self):
+    def test_product_view_update_invalid_must_by_valid_and_true(self):
+        """
+        Estes campos não são mais obrigatórios
+        """
         product = self.product
         new_erro_data = {'maquina_pt': ''}
 
@@ -153,9 +159,9 @@ class NotasViewsTest(TestCase):
 
         response = product_update(request, pk=product.pk)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         product.refresh_from_db()
-        self.assertEqual(product.maquina_pt, 'Maquina teste')
+        self.assertEqual(product.maquina_pt, None)
 
     def test_notas_list_anonimo(self):
         request = self.factory.get('/notas')
