@@ -15,3 +15,20 @@ def copy_nfi(pk):
         item.save()
 
     return nf_copy
+
+
+def make_full_description_ci(fields: tuple):
+    fields = fields
+    full_description = ''
+    fields_total_len = len(fields)
+    field_item_position = 1
+
+    for field in fields:
+        if field:
+            if field_item_position == fields_total_len:
+                full_description += field
+            else:
+                full_description += field + ' '
+        field_item_position += 1
+
+    return full_description

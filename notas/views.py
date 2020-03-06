@@ -21,7 +21,7 @@ from xhtml2pdf import pisa
 from xhtml2pdf.default import DEFAULT_FONT
 
 from core.models import UserProfile
-from .facade import copy_nfi
+from .facade import copy_nfi, make_full_description_ci
 from .forms import ProductForm, NotaForm, NotaItensForm, BlingProductForm
 from .models import Product, Nota, NotaItens
 
@@ -303,7 +303,7 @@ def nota_export_commercial_invoice(request, pk):
         ws.set_column(2, 2, 10)
         ws.set_column(4, 5, 15)
         ws.write(row_num, 0, row[0])
-        full_description = str(row[1] + ' ' + row[0] + ' ' + row[5] + ' ' + row[6] + ' ' + row[7] + ' ' + row[8])
+        full_description = make_full_description_ci((row[1], row[0], row[5], row[6], row[7], row[8]))
         ws.write(row_num, 1, full_description, text_format)
         ws.write(row_num, 2, row[2])
         ws.write(row_num, 3, row[3])
