@@ -64,7 +64,7 @@
           <img src="{{ item.item.imagem|original_image|iriencode }}" width="400px">
         {% endif %}
       </td>
-      <td>
+      <td width="60%">
         <p style="text-align: left; font-size: 18px;">Código: {{ item.item.modelo_pt }}</p>
         <p style="text-align: left; font-size: 18px;">Renminbi ¥: {{ item.item.preco_custo|floatformat:2 }}</p>
         <p style="text-align: left; font-size: 18px;">Preço Federal ₨: {{ item.item.preco_federal|floatformat:2 }}</p>
@@ -76,7 +76,7 @@
     </tr>
     <tr>
       <td colspan="2">
-        <p style="text-align: left; font-size: 18px;">Chinês: {{ item.item.maquina_ch }}</p>
+        <p style="text-align: left; font-size: 18px;">Chinês: {{ item.item.modelo_ch }}</p>
       </td>
     </tr>
   </table>

@@ -21,7 +21,8 @@ from xhtml2pdf import pisa
 from xhtml2pdf.default import DEFAULT_FONT
 
 from core.models import UserProfile
-from .facade import copy_nfi, make_full_description_ci
+from .facade import copy_nfi, make_full_description_ci, translate_from_csv, \
+    update_translations
 from .forms import ProductForm, NotaForm, NotaItensForm, BlingProductForm
 from .models import Product, Nota, NotaItens
 
@@ -78,7 +79,8 @@ def product_update(request, pk):
                 return redirect(product_update, pk=pk)
 
         except Exception as e:
-            messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
+            messages.warning(request,
+                             'Ocorreu um erro ao atualizar: {}'.format(e))
 
     else:
         form = ProductForm(instance=product)
@@ -148,7 +150,8 @@ def product_update_from_bling(request, pk):
                 return redirect(product_update, pk=pk)
 
         except Exception as e:
-            messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
+            messages.warning(request,
+                             'Ocorreu um erro ao atualizar: {}'.format(e))
 
     else:
         form = BlingProductForm(instance=product)
@@ -183,7 +186,8 @@ def nota_create(request):
 
     if request.method == 'POST':
         forms = NotaForm(request.POST, instance=nota_forms, prefix='main')
-        formset = item_nota_formset(request.POST, instance=nota_forms, prefix='product')
+        formset = item_nota_formset(request.POST, instance=nota_forms,
+                                    prefix='product')
 
         if forms.is_valid() and formset.is_valid():
             forms = forms.save(commit=False)
@@ -221,7 +225,8 @@ def nota_update(request, pk):
 
     if request.method == 'POST':
         forms = NotaForm(request.POST, instance=nota, prefix='main')
-        formset = item_nota_formset(request.POST, instance=nota, prefix='product')
+        formset = item_nota_formset(request.POST, instance=nota,
+                                    prefix='product')
 
         try:
             if forms.is_valid() and formset.is_valid():
@@ -231,7 +236,8 @@ def nota_update(request, pk):
                 return redirect(nota_list)
 
         except Exception as e:
-            messages.warning(request, 'Ocorreu um erro ao atualizar: {}'.format(e))
+            messages.warning(request,
+                             'Ocorreu um erro ao atualizar: {}'.format(e))
 
     else:
         forms = NotaForm(instance=nota, prefix='main')
@@ -253,18 +259,25 @@ def nota_export_csv(request, pk):
     nota_itens = nota.notaitens_set.all()
 
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="notaImportacao.csv"'
+    response[
+        'Content-Disposition'] = 'attachment; filename="notaImportacao.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
-                     'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
-                     'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD'])
+    writer.writerow(
+        ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+         'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
+         'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade',
+         'Valor USD'])
 
     for item in nota_itens:
-        colunas = [item.item.maquina_pt, item.item.tipo_pt, item.item.modelo_pt, item.item.area_trabalho_pt,
-                   item.item.eixo_z_pt, item.item.cor_pt, item.item.faz_pt, item.item.voltagem_pt,
-                   item.item.ncm, item.item.nome_classificacao, item.item.caixa_lateral_base,
-                   item.item.opcionais, item.item.imagem, item.quantidade, item.valor_usd]
+        colunas = [item.item.maquina_pt, item.item.tipo_pt,
+                   item.item.modelo_pt, item.item.area_trabalho_pt,
+                   item.item.eixo_z_pt, item.item.cor_pt, item.item.faz_pt,
+                   item.item.voltagem_pt,
+                   item.item.ncm, item.item.nome_classificacao,
+                   item.item.caixa_lateral_base,
+                   item.item.opcionais, item.item.imagem, item.quantidade,
+                   item.valor_usd]
         writer.writerow(colunas)
 
     return response
@@ -288,13 +301,16 @@ def nota_export_commercial_invoice(request, pk):
     # Sheet header, first row
     row_num = 0
 
-    columns = ['CODE', 'DESCRIPTION', 'NCM', 'QUANTITY', 'UNIT PRICE', 'TOTAL VALUE']
+    columns = ['CODE', 'DESCRIPTION', 'NCM', 'QUANTITY', 'UNIT PRICE',
+               'TOTAL VALUE']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num])
 
-    rows = nota_itens.values_list('item__modelo_pt', 'item__maquina_pt', 'item__ncm', 'quantidade', 'valor_usd',
-                                  'item__tipo_pt', 'item__area_trabalho_pt', 'item__eixo_z_pt', 'item__faz_pt')
+    rows = nota_itens.values_list('item__modelo_pt', 'item__maquina_pt',
+                                  'item__ncm', 'quantidade', 'valor_usd',
+                                  'item__tipo_pt', 'item__area_trabalho_pt',
+                                  'item__eixo_z_pt', 'item__faz_pt')
 
     for row in rows:
         row_num += 1
@@ -303,12 +319,14 @@ def nota_export_commercial_invoice(request, pk):
         ws.set_column(2, 2, 10)
         ws.set_column(4, 5, 15)
         ws.write(row_num, 0, row[0])
-        full_description = make_full_description_ci((row[1], row[0], row[5], row[6], row[7], row[8]))
+        full_description = make_full_description_ci(
+            (row[1], row[0], row[5], row[6], row[7], row[8]))
         ws.write(row_num, 1, full_description, text_format)
         ws.write(row_num, 2, row[2])
         ws.write(row_num, 3, row[3])
         ws.write(row_num, 4, row[4], money)
-        ws.write_formula(row_num, 5, f'=SUM(D{row_num + 1} * E{row_num + 1})', money)
+        ws.write_formula(row_num, 5, f'=SUM(D{row_num + 1} * E{row_num + 1})',
+                         money)
 
     wb.close()
 
@@ -316,7 +334,8 @@ def nota_export_commercial_invoice(request, pk):
     output.seek(0)
 
     response = HttpResponse(output, content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="Commercial-Invoice.xlsx"'
+    response[
+        'Content-Disposition'] = 'attachment; filename="Commercial-Invoice.xlsx"'
 
     return response
 
@@ -327,7 +346,8 @@ def nota_export_xls(request, pk):
     nota_itens = nota.notaitens_set.all()
 
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="notaImportacao.xls"'
+    response[
+        'Content-Disposition'] = 'attachment; filename="notaImportacao.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Itens da Nota')
@@ -338,9 +358,11 @@ def nota_export_xls(request, pk):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt',
+               'eixo_z_pt',
                'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
-               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
+               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade',
+               'Valor USD']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -348,10 +370,14 @@ def nota_export_xls(request, pk):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
-    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt', 'item__modelo_pt', 'item__area_trabalho_pt',
-                                  'item__eixo_z_pt', 'item__cor_pt', 'item__faz_pt', 'item__voltagem_pt',
-                                  'item__ncm', 'item__nome_classificacao', 'item__caixa_lateral_base',
-                                  'item__opcionais', 'item__imagem', 'quantidade', 'valor_usd')
+    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt',
+                                  'item__modelo_pt', 'item__area_trabalho_pt',
+                                  'item__eixo_z_pt', 'item__cor_pt',
+                                  'item__faz_pt', 'item__voltagem_pt',
+                                  'item__ncm', 'item__nome_classificacao',
+                                  'item__caixa_lateral_base',
+                                  'item__opcionais', 'item__imagem',
+                                  'quantidade', 'valor_usd')
 
     for row in rows:
         row_num += 1
@@ -376,21 +402,28 @@ def nota_export_xlsx(request, pk):
     # Sheet header, first row
     row_num = 0
 
-    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt', 'eixo_z_pt',
+    columns = ['maquina_pt', 'tipo_pt', 'modelo_pt', 'area_trabalho_pt',
+               'eixo_z_pt',
                'cor_pt', 'faz_pt', 'voltagem_pt', 'ncm', 'nome_classificacao',
-               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade', 'Valor USD']
+               'caixa_lateral_base', 'opcionais', 'imagem', 'Quantidade',
+               'Valor USD']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num])
 
-    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt', 'item__modelo_pt', 'item__area_trabalho_pt',
-                                  'item__eixo_z_pt', 'item__cor_pt', 'item__faz_pt', 'item__voltagem_pt',
-                                  'item__ncm', 'item__nome_classificacao', 'item__caixa_lateral_base',
-                                  'item__opcionais', 'item__imagem', 'quantidade', 'valor_usd')
+    rows = nota_itens.values_list('item__maquina_pt', 'item__tipo_pt',
+                                  'item__modelo_pt', 'item__area_trabalho_pt',
+                                  'item__eixo_z_pt', 'item__cor_pt',
+                                  'item__faz_pt', 'item__voltagem_pt',
+                                  'item__ncm', 'item__nome_classificacao',
+                                  'item__caixa_lateral_base',
+                                  'item__opcionais', 'item__imagem',
+                                  'quantidade', 'valor_usd')
 
     for row in rows:
         try:
-            imagem = urllib.parse.quote(nota.notaitens_set.all()[row_num].item.imagem, safe='/:')
+            imagem = urllib.parse.quote(
+                nota.notaitens_set.all()[row_num].item.imagem, safe='/:')
         except ValueError:
             imagem = ''
 
@@ -450,7 +483,8 @@ def link_callback(uri, rel):
 
 
 def nota_export_pdf(request, pk):
-    pdfmetrics.registerFont(TTFont('yh', os.path.abspath(settings.BASE_DIR + '/templates/fonts/msyh.ttf')))
+    pdfmetrics.registerFont(TTFont('yh', os.path.abspath(
+        settings.BASE_DIR + '/templates/fonts/msyh.ttf')))
 
     DEFAULT_FONT['helvetica'] = 'yh'
 
@@ -493,7 +527,8 @@ def nota_export_pdf(request, pk):
     html = template.render(context)
 
     # create a pdf
-    pisa_status = pisa.CreatePDF(html, dest=response, encoding='utf8', link_callback=link_callback)
+    pisa_status = pisa.CreatePDF(html, dest=response, encoding='utf8',
+                                 link_callback=link_callback)
     # if error then show some funy view
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
@@ -512,7 +547,8 @@ def products_report_csv(request):
     products = Product.objects.all()
 
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="relatorio-produtos.csv"'
+    response[
+        'Content-Disposition'] = 'attachment; filename="relatorio-produtos.csv"'
 
     colunas = []
     for key in products.values().first().keys():
@@ -522,6 +558,49 @@ def products_report_csv(request):
     writer.writerow(colunas)
 
     for product in products.values():
+        colunas = []
+
+        for value in product.values():
+            colunas.append(value)
+
+        writer.writerow(colunas)
+
+    return response
+
+
+@login_required
+def upload_csv(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        csv_file = request.FILES['myfile'].file
+        csv_content = translate_from_csv(csv_file)
+
+        update_translations(csv_content)
+        messages.success(request, "Processado")
+
+        context = {'content': csv_content}
+        return render(request, 'products/upload_csv.html', context)
+
+    return render(request, 'products/upload_csv.html')
+
+
+@login_required
+def download_csv_example(request):
+    products = Product.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response[
+        'Content-Disposition'] = 'attachment; filename="relatorio-produtos.csv"'
+
+    colunas = []
+    for key in products.values('codigo_sku', 'modelo_pt', 'ncm', 'modelo_en',
+                               'modelo_ch').first().keys():
+        colunas.append(key)
+
+    writer = csv.writer(response)
+    writer.writerow(colunas)
+
+    for product in products.values('codigo_sku', 'modelo_pt', 'ncm',
+                                   'modelo_en', 'modelo_ch'):
         colunas = []
 
         for value in product.values():
