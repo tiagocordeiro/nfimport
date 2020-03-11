@@ -1,4 +1,7 @@
-from notas.models import NotaItens, Nota
+import csv
+import io
+
+from notas.models import NotaItens, Nota, Product
 
 
 def copy_nfi(pk):
@@ -32,3 +35,30 @@ def make_full_description_ci(fields: tuple):
         field_item_position += 1
 
     return full_description
+
+
+def translate_from_csv(csv_file):
+    csv_file = io.TextIOWrapper(csv_file)
+    dialect = csv.Sniffer().sniff(csv_file.read(1024), delimiters=";,")
+    csv_file.seek(0)
+    reader = csv.reader(csv_file, dialect)
+    return list(reader)
+
+
+def update_translations(lista: list):
+    products_for_update = []
+
+    for product in lista:
+        codigo_sku = str(product[0]).replace('\t', '')
+        try:
+            product_for_update = Product.objects.get(codigo_sku=codigo_sku)
+            product_for_update.modelo_en = product[3]
+            product_for_update.modelo_ch = product[4]
+            products_for_update.append(product_for_update)
+        except Product.DoesNotExist:
+            pass
+
+    Product.objects.bulk_update(products_for_update, [
+        'modelo_en',
+        'modelo_ch'
+    ])
