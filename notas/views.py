@@ -538,7 +538,7 @@ def nota_export_pdf(request, pk):
 def nota_copy(request, pk):
     new_nf = copy_nfi(pk)
 
-    messages.success(request, f"Nota copiada com sucesso")
+    messages.success(request, "Nota copiada com sucesso")
     return redirect(nota_update, pk=new_nf.pk)
 
 
