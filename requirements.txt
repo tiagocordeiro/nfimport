@@ -17,7 +17,7 @@ psycopg2-binary==2.8.5
 python-decouple==3.3
 python-dotenv==0.13.0
 pytz==2020.1
-requests==2.23.0
+requests==2.24.0
 six==1.15.0
 urllib3==1.25.9
 whitenoise==5.1.0
