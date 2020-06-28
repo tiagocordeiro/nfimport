@@ -8,7 +8,7 @@ dj3-cloudinary-storage==0.0.1
 django-crispy-forms==1.9.1
 django-heroku==0.3.1
 gunicorn==20.0.4
-idna==2.9
+idna==2.10
 mock==4.0.2
 pbr==5.4.5
 Pillow==7.1.2
