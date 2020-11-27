@@ -40,7 +40,7 @@ cryptography==2.9.2
 inflection==0.4.0
 more-itertools==8.3.0
 ndg-httpsclient==0.5.1
-pyOpenSSL==19.1.0
+pyOpenSSL==20.0.0
 pyasn1==0.4.8
 pycparser==2.20
 quandl==3.5.0
