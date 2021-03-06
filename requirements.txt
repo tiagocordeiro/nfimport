@@ -48,7 +48,7 @@ quandl==3.5.0
 # PDF
 html5lib==1.0.1
 pyPdf2==1.26.0
-reportlab==3.5.42
+reportlab==3.5.63
 webencodings==0.5.1
 xhtml2pdf==0.2.4
 
