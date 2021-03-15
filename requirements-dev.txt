@@ -1,5 +1,5 @@
 pycodestyle==2.6.0
-pyflakes==2.2.0
+pyflakes==2.3.0
 
 # Flake8
 entrypoints==0.3
