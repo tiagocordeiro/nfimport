@@ -173,10 +173,10 @@ if CLOUDINARY_URL:  # pragma: no cover
         'cloudinary',
     ] + INSTALLED_APPS
 
-    COLLECTFAST_ENABLED = False
+    COLLECTFAST_ENABLED = True
 
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
-    STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+    STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticCloudinaryStorage'
 
 # Sentry
 sentry_sdk.init(dsn=config('SENTRY_DSN'), integrations=[DjangoIntegration()])
