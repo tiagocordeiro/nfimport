@@ -1,18 +1,10 @@
-pycodestyle==2.6.0
-pyflakes==2.2.0
-
 # Flake8
-entrypoints==0.3
-flake8==3.8.2
-mccabe==0.6.1
-
+flake8==3.9.0
 
 # Django DebugToolbar
-django-debug-toolbar==2.2
-sqlparse==0.3.1
-
+django-debug-toolbar==3.2
 
 # Coverage
-coverage==5.1
+coverage==5.5
 
 -r requirements.txt
