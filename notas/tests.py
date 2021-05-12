@@ -9,8 +9,7 @@ from .forms import ProductForm, NotaItensForm, NotaForm
 from .models import Nota, Product, NotaItens
 from .views import product_list, product_create, nota_list, nota_create, \
     nota_update, product_update, \
-    nota_export_csv, nota_export_xls, nota_export_xlsx, nota_export_pdf, \
-    products_report_csv
+    nota_export_csv, nota_export_xls, nota_export_pdf, products_report_csv
 
 
 class NotasViewsTest(TestCase):
@@ -289,14 +288,6 @@ class NotasViewsTest(TestCase):
         request.user = self.user
 
         response = nota_export_xls(request, pk=nota.pk)
-        self.assertEqual(response.status_code, 200)
-
-    def test_nota_export_xlsx_statuscode(self):
-        nota = self.nota
-        request = self.factory.get('/nota/export/xlsx/' + str(nota.pk))
-        request.user = self.user
-
-        response = nota_export_xlsx(request, pk=nota.pk)
         self.assertEqual(response.status_code, 200)
 
     def test_nota_export_pdf_statuscode(self):
